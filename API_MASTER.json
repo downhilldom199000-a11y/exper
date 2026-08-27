@@ -1,0 +1,2944 @@
+{
+  "metadata": {
+    "generated": "2026-08-26",
+    "app": "TKREC 1.3.1",
+    "package": "com.tkrec.app",
+    "js_version": "1.3.0",
+    "total_unique_endpoints": 88,
+    "confirmed_endpoints": 43,
+    "static_only_endpoints": 45,
+    "legacy_endpoints": 5,
+    "undocumented_endpoints": 5,
+    "base_urls": {
+      "main_api": "https://raid.arkzynco.com",
+      "public_api": "https://ws.arkzynco.com",
+      "secondary_api": "https://ws.arkzynco.com",
+      "analytics": "https://intake.arkzynco.com"
+    },
+    "axios_instances": {
+      "u": {
+        "role": "main_authenticated",
+        "base_url": "https://raid.arkzynco.com/",
+        "timeout": 30000,
+        "withCredentials": true,
+        "withXSRFToken": true,
+        "headers": {
+          "X-Requested-With": "XMLHttpRequest",
+          "X-App-Version": "1.3.0"
+        },
+        "retry": {
+          "retries": 1,
+          "delay": "exponential"
+        },
+        "interceptors": {
+          "request": "Injects Bearer token if logged in",
+          "response": "Auto-logout on 401 (except /api/v2/logout)"
+        }
+      },
+      "Bg": {
+        "role": "public_unauthenticated",
+        "base_url": "https://ws.arkzynco.com",
+        "timeout": 30000,
+        "headers": {
+          "Content-Type": "application/json"
+        }
+      },
+      "xe": {
+        "role": "secondary_authenticated",
+        "base_url": "https://ws.arkzynco.com",
+        "timeout": 30000,
+        "interceptors": {
+          "request": "Injects Bearer token if logged in"
+        }
+      }
+    }
+  },
+  "endpoints": [
+    {
+      "id": 1,
+      "method": "POST",
+      "path": "/api/signin",
+      "host": "raid.arkzynco.com",
+      "full_url": "https://raid.arkzynco.com/api/signin",
+      "feature": "authentication",
+      "description": "Sign in with email and password",
+      "static_status": "CONFIRMED_STATIC",
+      "dynamic_status": "CONFIRMED_401",
+      "confidence": "HIGH",
+      "source_files": ["index-1.3.0.js"],
+      "calling_function": "Q.signin(s)",
+      "request_headers": {
+        "Content-Type": "application/json"
+      },
+      "request_body": {
+        "email": {"type": "string", "required": true},
+        "password": {"type": "string", "required": true}
+      },
+      "response_status": [200, 401],
+      "response_schema": {
+        "200": {
+          "user": "UserObject",
+          "token": "string (JWT)"
+        },
+        "401": {
+          "message": "Invalid email or password."
+        }
+      },
+      "authentication": "none",
+      "csrf": false,
+      "cookies": [],
+      "related_endpoints": [2, 3, 73],
+      "media_related": false,
+      "streaming_related": false,
+      "notes": "Primary email/password login"
+    },
+    {
+      "id": 2,
+      "method": "POST",
+      "path": "/api/login",
+      "host": "raid.arkzynco.com",
+      "full_url": "https://raid.arkzynco.com/api/login",
+      "feature": "authentication",
+      "description": "Social login (Google, Apple, Twitter, Facebook)",
+      "static_status": "CONFIRMED_STATIC",
+      "dynamic_status": "CONFIRMED_401",
+      "confidence": "HIGH",
+      "source_files": ["index-1.3.0.js"],
+      "calling_function": "Q.login(s)",
+      "request_headers": {
+        "Content-Type": "application/json"
+      },
+      "request_body": {
+        "provider": {"type": "string", "enum": ["google", "apple", "twitter", "facebook"], "required": true},
+        "token": {"type": "string", "required": true},
+        "email": {"type": "string", "required": false}
+      },
+      "response_status": [200, 401],
+      "response_schema": {
+        "200": {
+          "user": "UserObject",
+          "token": "string (JWT)"
+        }
+      },
+      "authentication": "none",
+      "csrf": false,
+      "cookies": [],
+      "related_endpoints": [1, 10],
+      "media_related": false,
+      "streaming_related": false,
+      "notes": "OAuth social login via Google/Apple/Twitter/Facebook"
+    },
+    {
+      "id": 3,
+      "method": "POST",
+      "path": "/api/register",
+      "host": "raid.arkzynco.com",
+      "full_url": "https://raid.arkzynco.com/api/register",
+      "feature": "authentication",
+      "description": "Register new account",
+      "static_status": "CONFIRMED_STATIC",
+      "dynamic_status": "CONFIRMED_401",
+      "confidence": "MEDIUM",
+      "source_files": ["index-1.3.0.js"],
+      "calling_function": "Q.register(s)",
+      "request_headers": {
+        "Content-Type": "application/json"
+      },
+      "request_body": {
+        "email": {"type": "string", "required": true},
+        "password": {"type": "string", "required": true},
+        "name": {"type": "string", "required": false}
+      },
+      "response_status": [200, 401],
+      "response_schema": {
+        "200": {
+          "user": "UserObject",
+          "token": "string (JWT)"
+        }
+      },
+      "authentication": "none",
+      "csrf": false,
+      "cookies": [],
+      "related_endpoints": [1, 5],
+      "media_related": false,
+      "streaming_related": false,
+      "notes": "New account registration"
+    },
+    {
+      "id": 4,
+      "method": "POST",
+      "path": "/api/login-device",
+      "host": "raid.arkzynco.com",
+      "full_url": "https://raid.arkzynco.com/api/login-device",
+      "feature": "authentication",
+      "description": "Device-based login (Capacitor device ID)",
+      "static_status": "CONFIRMED_STATIC",
+      "dynamic_status": "NOT_TESTED",
+      "confidence": "MEDIUM",
+      "source_files": ["index-1.3.0.js"],
+      "calling_function": "Q.loginDevice(s)",
+      "request_headers": {
+        "Content-Type": "application/json"
+      },
+      "request_body": {
+        "device_id": {"type": "string", "required": true}
+      },
+      "response_status": [200],
+      "response_schema": {
+        "200": {
+          "user": "UserObject",
+          "token": "string (JWT)"
+        }
+      },
+      "authentication": "none",
+      "csrf": false,
+      "cookies": [],
+      "related_endpoints": [1, 2],
+      "media_related": false,
+      "streaming_related": false,
+      "notes": "Device-based auto-login using Capacitor device UUID"
+    },
+    {
+      "id": 5,
+      "method": "POST",
+      "path": "/api/confirm-email",
+      "host": "raid.arkzynco.com",
+      "full_url": "https://raid.arkzynco.com/api/confirm-email",
+      "feature": "authentication",
+      "description": "Email confirmation for new accounts",
+      "static_status": "CONFIRMED_STATIC",
+      "dynamic_status": "CONFIRMED_401",
+      "confidence": "MEDIUM",
+      "source_files": ["index-1.3.0.js"],
+      "calling_function": "Q.confirmEmail(s)",
+      "request_headers": {
+        "Content-Type": "application/json"
+      },
+      "request_body": {
+        "token": {"type": "string", "required": true}
+      },
+      "response_status": [200, 401],
+      "response_schema": {},
+      "authentication": "none",
+      "csrf": false,
+      "cookies": [],
+      "related_endpoints": [3],
+      "media_related": false,
+      "streaming_related": false,
+      "notes": "Confirm email after registration"
+    },
+    {
+      "id": 6,
+      "method": "POST",
+      "path": "/api/forgot-password",
+      "host": "raid.arkzynco.com",
+      "full_url": "https://raid.arkzynco.com/api/forgot-password",
+      "feature": "authentication",
+      "description": "Request password reset email",
+      "static_status": "CONFIRMED_STATIC",
+      "dynamic_status": "CONFIRMED_401",
+      "confidence": "MEDIUM",
+      "source_files": ["index-1.3.0.js"],
+      "calling_function": "Q.forgotPassword(s)",
+      "request_headers": {
+        "Content-Type": "application/json"
+      },
+      "request_body": {
+        "email": {"type": "string", "required": true}
+      },
+      "response_status": [200, 401],
+      "response_schema": {},
+      "authentication": "none",
+      "csrf": false,
+      "cookies": [],
+      "related_endpoints": [7],
+      "media_related": false,
+      "streaming_related": false,
+      "notes": "Sends password reset email"
+    },
+    {
+      "id": 7,
+      "method": "POST",
+      "path": "/api/reset-password/{token}",
+      "host": "raid.arkzynco.com",
+      "full_url": "https://raid.arkzynco.com/api/reset-password/{token}",
+      "feature": "authentication",
+      "description": "Execute password reset with token",
+      "static_status": "CONFIRMED_STATIC",
+      "dynamic_status": "NOT_TESTED",
+      "confidence": "MEDIUM",
+      "source_files": ["index-1.3.0.js"],
+      "calling_function": "Q.resetPassword(s)",
+      "request_headers": {
+        "Content-Type": "application/json"
+      },
+      "path_params": {
+        "token": {"type": "string", "source": "Email reset link", "description": "Password reset token from email"}
+      },
+      "request_body": {
+        "password": {"type": "string", "required": true}
+      },
+      "response_status": [200],
+      "response_schema": {},
+      "authentication": "none",
+      "csrf": false,
+      "cookies": [],
+      "related_endpoints": [6],
+      "media_related": false,
+      "streaming_related": false,
+      "notes": "Trailing slash in source code: /api/reset-password/"
+    },
+    {
+      "id": 8,
+      "method": "GET",
+      "path": "/api/csrf",
+      "host": "raid.arkzynco.com",
+      "full_url": "https://raid.arkzynco.com/api/csrf",
+      "feature": "authentication",
+      "description": "Fetch CSRF token for state-changing requests",
+      "static_status": "CONFIRMED_STATIC",
+      "dynamic_status": "CONFIRMED_401",
+      "confidence": "HIGH",
+      "source_files": ["index-1.3.0.js"],
+      "calling_function": "Q.csrf()",
+      "request_headers": {},
+      "request_body": null,
+      "response_status": [200, 401],
+      "response_schema": {
+        "200": "Sets XSRF-TOKEN cookie"
+      },
+      "authentication": "none",
+      "csrf": false,
+      "cookies": ["XSRF-TOKEN"],
+      "related_endpoints": [],
+      "media_related": false,
+      "streaming_related": false,
+      "notes": "Sets XSRF-TOKEN cookie; used by withXSRFToken axios config"
+    },
+    {
+      "id": 9,
+      "method": "POST",
+      "path": "/api/auth/fcm",
+      "host": "raid.arkzynco.com",
+      "full_url": "https://raid.arkzynco.com/api/auth/fcm",
+      "feature": "authentication",
+      "description": "Register Firebase Cloud Messaging token",
+      "static_status": "CONFIRMED_STATIC",
+      "dynamic_status": "NOT_TESTED",
+      "confidence": "MEDIUM",
+      "source_files": ["index-1.3.0.js"],
+      "calling_function": "L.fcm(s)",
+      "request_headers": {
+        "Authorization": "Bearer {token}",
+        "Content-Type": "application/json"
+      },
+      "request_body": {
+        "token": {"type": "string", "required": true, "description": "FCM registration token"},
+        "platform": {"type": "string", "required": false, "description": "android/ios"}
+      },
+      "response_status": [200, 401],
+      "response_schema": {},
+      "authentication": "JWT",
+      "csrf": false,
+      "cookies": [],
+      "related_endpoints": [],
+      "media_related": false,
+      "streaming_related": false,
+      "notes": "FCM token registration for push notifications"
+    },
+    {
+      "id": 10,
+      "method": "POST",
+      "path": "/api/status",
+      "host": "raid.arkzynco.com",
+      "full_url": "https://raid.arkzynco.com/api/status",
+      "feature": "authentication",
+      "description": "Social login status endpoint",
+      "static_status": "CONFIRMED_STATIC",
+      "dynamic_status": "CONFIRMED_401",
+      "confidence": "HIGH",
+      "source_files": ["index-1.3.0.js"],
+      "calling_function": "Q.status(s)",
+      "request_headers": {
+        "Authorization": "Bearer {token}",
+        "Content-Type": "application/json"
+      },
+      "request_body": {
+        "client": {"type": "string", "enum": ["google", "apple", "facebook", "twitter"], "required": true},
+        "token": {"type": "string", "required": true},
+        "device_id": {"type": "string", "required": false},
+        "os_version": {"type": "string", "required": false},
+        "model": {"type": "string", "required": false},
+        "platform": {"type": "string", "enum": ["android", "ios"], "required": false},
+        "app_version": {"type": "string", "required": false}
+      },
+      "response_status": [200, 401],
+      "response_schema": {
+        "200": {
+          "user": "UserObject",
+          "token": "string (JWT)"
+        }
+      },
+      "authentication": "JWT + pl() helper",
+      "csrf": false,
+      "cookies": [],
+      "related_endpoints": [2],
+      "media_related": false,
+      "streaming_related": false,
+      "notes": "Used during OAuth flow to exchange social token for JWT"
+    },
+    {
+      "id": 11,
+      "method": "GET",
+      "path": "/api/v2/user",
+      "host": "raid.arkzynco.com",
+      "full_url": "https://raid.arkzynco.com/api/v2/user",
+      "feature": "user_management",
+      "description": "Get current authenticated user profile",
+      "static_status": "CONFIRMED_STATIC",
+      "dynamic_status": "CONFIRMED_401",
+      "confidence": "HIGH",
+      "source_files": ["index-1.3.0.js"],
+      "calling_function": "L.fetch()",
+      "request_headers": {
+        "Authorization": "Bearer {token}"
+      },
+      "request_body": null,
+      "response_status": [200, 401],
+      "response_schema": {
+        "200": {
+          "data": {
+            "uid": "string",
+            "name": "string",
+            "email": "string",
+            "subscription": "SubscriptionObject",
+            "profiles": "[ProfileObject]",
+            "settings": "SettingsObject"
+          }
+        }
+      },
+      "authentication": "JWT",
+      "csrf": false,
+      "cookies": [],
+      "related_endpoints": [12, 13],
+      "media_related": false,
+      "streaming_related": false,
+      "notes": "Returns full user object with subscription, profiles, settings"
+    },
+    {
+      "id": 12,
+      "method": "PUT",
+      "path": "/api/v2/user",
+      "host": "raid.arkzynco.com",
+      "full_url": "https://raid.arkzynco.com/api/v2/user",
+      "feature": "user_management",
+      "description": "Update current user profile",
+      "static_status": "CONFIRMED_STATIC",
+      "dynamic_status": "CONFIRMED_401",
+      "confidence": "HIGH",
+      "source_files": ["index-1.3.0.js"],
+      "calling_function": "L.update(s)",
+      "request_headers": {
+        "Authorization": "Bearer {token}",
+        "Content-Type": "application/json"
+      },
+      "request_body": {
+        "name": {"type": "string", "required": false},
+        "email": {"type": "string", "required": false},
+        "settings": {"type": "object", "required": false, "fields": {
+          "default_quality": {"type": "string", "enum": ["216p", "360p", "480p", "720p"]},
+          "instant_download": {"type": "boolean"},
+          "notifications_enabled": {"type": "boolean"},
+          "dark_theme": {"type": "boolean"},
+          "locale": {"type": "string"}
+        }}
+      },
+      "response_status": [200, 401],
+      "response_schema": {
+        "200": {
+          "user": "UserObject"
+        }
+      },
+      "authentication": "JWT",
+      "csrf": false,
+      "cookies": [],
+      "related_endpoints": [11],
+      "media_related": false,
+      "streaming_related": false,
+      "notes": "Partial update - only sent fields are updated"
+    },
+    {
+      "id": 13,
+      "method": "DELETE",
+      "path": "/api/v2/user",
+      "host": "raid.arkzynco.com",
+      "full_url": "https://raid.arkzynco.com/api/v2/user",
+      "feature": "user_management",
+      "description": "Delete current user account",
+      "static_status": "CONFIRMED_STATIC",
+      "dynamic_status": "CONFIRMED_401",
+      "confidence": "HIGH",
+      "source_files": ["index-1.3.0.js"],
+      "calling_function": "L.delete()",
+      "request_headers": {
+        "Authorization": "Bearer {token}"
+      },
+      "request_body": null,
+      "response_status": [200, 401],
+      "response_schema": {},
+      "authentication": "JWT",
+      "csrf": false,
+      "cookies": [],
+      "related_endpoints": [11],
+      "media_related": false,
+      "streaming_related": false,
+      "notes": "Permanent account deletion"
+    },
+    {
+      "id": 14,
+      "method": "POST",
+      "path": "/api/v2/user/installed",
+      "host": "raid.arkzynco.com",
+      "full_url": "https://raid.arkzynco.com/api/v2/user/installed",
+      "feature": "user_management",
+      "description": "Mark app as installed (attribution tracking)",
+      "static_status": "CONFIRMED_STATIC",
+      "dynamic_status": "CONFIRMED_401",
+      "confidence": "MEDIUM",
+      "source_files": ["index-1.3.0.js"],
+      "calling_function": "L.installed(s)",
+      "request_headers": {
+        "Authorization": "Bearer {token}",
+        "Content-Type": "application/json"
+      },
+      "request_body": {
+        "referrer": {"type": "string", "required": false},
+        "platform": {"type": "string", "required": false}
+      },
+      "response_status": [200, 401],
+      "response_schema": {},
+      "authentication": "JWT",
+      "csrf": false,
+      "cookies": [],
+      "related_endpoints": [],
+      "media_related": false,
+      "streaming_related": false,
+      "notes": "Attribution/install tracking"
+    },
+    {
+      "id": 15,
+      "method": "POST",
+      "path": "/api/v2/user/transfer-recordings/{accountId}/{targetId}",
+      "host": "raid.arkzynco.com",
+      "full_url": "https://raid.arkzynco.com/api/v2/user/transfer-recordings/{accountId}/{targetId}",
+      "feature": "user_management",
+      "description": "Transfer recordings between accounts/profiles",
+      "static_status": "CONFIRMED_STATIC",
+      "dynamic_status": "NOT_TESTED",
+      "confidence": "MEDIUM",
+      "source_files": ["index-1.3.0.js"],
+      "calling_function": "L.transferRecordings(uid, targetUid)",
+      "request_headers": {
+        "Authorization": "Bearer {token}"
+      },
+      "path_params": {
+        "accountId": {"type": "string", "source": "Current user/profile ID"},
+        "targetId": {"type": "string", "source": "Target user/profile ID"}
+      },
+      "request_body": null,
+      "response_status": [200, 401],
+      "response_schema": {},
+      "authentication": "JWT",
+      "csrf": false,
+      "cookies": [],
+      "related_endpoints": [],
+      "media_related": false,
+      "streaming_related": false,
+      "notes": "No request body - IDs in path"
+    },
+    {
+      "id": 16,
+      "method": "POST",
+      "path": "/api/v2/user/profile",
+      "host": "raid.arkzynco.com",
+      "full_url": "https://raid.arkzynco.com/api/v2/user/profile",
+      "feature": "user_profiles",
+      "description": "Create a new sub-profile",
+      "static_status": "CONFIRMED_STATIC",
+      "dynamic_status": "CONFIRMED_401",
+      "confidence": "HIGH",
+      "source_files": ["index-1.3.0.js"],
+      "calling_function": "L.addProfile(s)",
+      "request_headers": {
+        "Authorization": "Bearer {token}",
+        "Content-Type": "application/json"
+      },
+      "request_body": {
+        "name": {"type": "string", "required": true},
+        "email": {"type": "string", "required": false}
+      },
+      "response_status": [200, 401],
+      "response_schema": {
+        "200": {
+          "profile": "ProfileObject"
+        }
+      },
+      "authentication": "JWT",
+      "csrf": false,
+      "cookies": [],
+      "related_endpoints": [17, 18, 19, 20],
+      "media_related": false,
+      "streaming_related": false,
+      "notes": "Multi-profile system - one account can have multiple profiles"
+    },
+    {
+      "id": 17,
+      "method": "POST",
+      "path": "/api/v2/user/profile/{id}",
+      "host": "raid.arkzynco.com",
+      "full_url": "https://raid.arkzynco.com/api/v2/user/profile/{id}",
+      "feature": "user_profiles",
+      "description": "Update an existing sub-profile",
+      "static_status": "CONFIRMED_STATIC",
+      "dynamic_status": "NOT_TESTED",
+      "confidence": "MEDIUM",
+      "source_files": ["index-1.3.0.js"],
+      "calling_function": "L.updateProfile(id, s)",
+      "request_headers": {
+        "Authorization": "Bearer {token}",
+        "Content-Type": "application/json"
+      },
+      "path_params": {
+        "id": {"type": "string", "source": "Profile ID"}
+      },
+      "request_body": {
+        "name": {"type": "string", "required": false},
+        "email": {"type": "string", "required": false}
+      },
+      "response_status": [200, 401],
+      "response_schema": {
+        "200": {
+          "profile": "ProfileObject"
+        }
+      },
+      "authentication": "JWT",
+      "csrf": false,
+      "cookies": [],
+      "related_endpoints": [16, 18],
+      "media_related": false,
+      "streaming_related": false,
+      "notes": "Update sub-profile details"
+    },
+    {
+      "id": 18,
+      "method": "DELETE",
+      "path": "/api/v2/user/profile/{id}",
+      "host": "raid.arkzynco.com",
+      "full_url": "https://raid.arkzynco.com/api/v2/user/profile/{id}",
+      "feature": "user_profiles",
+      "description": "Delete a sub-profile",
+      "static_status": "CONFIRMED_STATIC",
+      "dynamic_status": "NOT_TESTED",
+      "confidence": "MEDIUM",
+      "source_files": ["index-1.3.0.js"],
+      "calling_function": "L.removeProfile(id)",
+      "request_headers": {
+        "Authorization": "Bearer {token}"
+      },
+      "path_params": {
+        "id": {"type": "string", "source": "Profile ID"}
+      },
+      "request_body": null,
+      "response_status": [200, 401],
+      "response_schema": {},
+      "authentication": "JWT",
+      "csrf": false,
+      "cookies": [],
+      "related_endpoints": [16, 17],
+      "media_related": false,
+      "streaming_related": false,
+      "notes": "Permanent profile deletion"
+    },
+    {
+      "id": 19,
+      "method": "PUT",
+      "path": "/api/v2/user/profile/{id}/logout",
+      "host": "raid.arkzynco.com",
+      "full_url": "https://raid.arkzynco.com/api/v2/user/profile/{id}/logout",
+      "feature": "user_profiles",
+      "description": "Logout from a sub-profile",
+      "static_status": "CONFIRMED_STATIC",
+      "dynamic_status": "NOT_TESTED",
+      "confidence": "MEDIUM",
+      "source_files": ["index-1.3.0.js"],
+      "calling_function": "L.logoutProfile(s)",
+      "request_headers": {
+        "Authorization": "Bearer {token}",
+        "Content-Type": "application/json"
+      },
+      "path_params": {
+        "id": {"type": "string", "source": "Profile ID"}
+      },
+      "request_body": "{...s} (spread profile object)",
+      "response_status": [200, 401],
+      "response_schema": {
+        "200": {
+          "profile": "ProfileObject"
+        }
+      },
+      "authentication": "JWT",
+      "csrf": false,
+      "cookies": [],
+      "related_endpoints": [16],
+      "media_related": false,
+      "streaming_related": false,
+      "notes": "Logout specific profile, keep main session"
+    },
+    {
+      "id": 20,
+      "method": "POST",
+      "path": "/api/v2/user/profile/{id}/mute",
+      "host": "raid.arkzynco.com",
+      "full_url": "https://raid.arkzynco.com/api/v2/user/profile/{id}/mute",
+      "feature": "user_profiles",
+      "description": "Mute/unmute notifications for a sub-profile",
+      "static_status": "CONFIRMED_STATIC",
+      "dynamic_status": "NOT_TESTED",
+      "confidence": "MEDIUM",
+      "source_files": ["index-1.3.0.js"],
+      "calling_function": "L.muteProfile(s)",
+      "request_headers": {
+        "Authorization": "Bearer {token}"
+      },
+      "path_params": {
+        "id": {"type": "string", "source": "Profile ID"}
+      },
+      "request_body": null,
+      "response_status": [200, 401],
+      "response_schema": {
+        "200": {
+          "profile": "ProfileObject"
+        }
+      },
+      "authentication": "JWT",
+      "csrf": false,
+      "cookies": [],
+      "related_endpoints": [16],
+      "media_related": false,
+      "streaming_related": false,
+      "notes": "Toggle mute - no body, acts as toggle"
+    },
+    {
+      "id": 21,
+      "method": "GET",
+      "path": "/api/v2/followers/{accountId}/list",
+      "host": "raid.arkzynco.com",
+      "full_url": "https://raid.arkzynco.com/api/v2/followers/{accountId}/list",
+      "feature": "followers_tracking",
+      "description": "List all tracked TikTok profiles",
+      "static_status": "CONFIRMED_STATIC",
+      "dynamic_status": "CONFIRMED_401",
+      "confidence": "HIGH",
+      "source_files": ["index-1.3.0.js"],
+      "calling_function": "y.followers(uid, s)",
+      "request_headers": {
+        "Authorization": "Bearer {token}"
+      },
+      "path_params": {
+        "accountId": {"type": "string", "source": "User/account ID"}
+      },
+      "request_query_params": {
+        "page": {"type": "number", "default": 1},
+        "limit": {"type": "number", "default": 20},
+        "sort": {"type": "string", "default": "created_at"},
+        "order": {"type": "string", "enum": ["asc", "desc"], "default": "desc"},
+        "q": {"type": "string", "description": "Search query"},
+        "a": {"type": "string", "description": "Filter by status (active/inactive/frozen)"}
+      },
+      "response_status": [200, 401],
+      "response_schema": {
+        "200": {
+          "data": "[ProfileObject]",
+          "totals": {"active": "number", "inactive": "number", "frozen": "number"},
+          "meta": {"current_page": "number", "last_page": "number", "per_page": "number", "total": "number"},
+          "rc": "object"
+        }
+      },
+      "authentication": "JWT",
+      "csrf": false,
+      "cookies": [],
+      "related_endpoints": [22, 23, 24, 25],
+      "media_related": false,
+      "streaming_related": false,
+      "notes": "Main followers list endpoint. Response has unique 'totals' and 'rc' fields."
+    },
+    {
+      "id": 22,
+      "method": "POST",
+      "path": "/api/v2/followers/{accountId}",
+      "host": "raid.arkzynco.com",
+      "full_url": "https://raid.arkzynco.com/api/v2/followers/{accountId}",
+      "feature": "followers_tracking",
+      "description": "Add a new TikTok profile to tracking",
+      "static_status": "CONFIRMED_STATIC",
+      "dynamic_status": "CONFIRMED_401",
+      "confidence": "HIGH",
+      "source_files": ["index-1.3.0.js"],
+      "calling_function": "y.store(uid, s)",
+      "request_headers": {
+        "Authorization": "Bearer {token}",
+        "Content-Type": "application/json"
+      },
+      "path_params": {
+        "accountId": {"type": "string", "source": "User/account ID"}
+      },
+      "request_body": {
+        "username": {"type": "string", "required": true},
+        "fetch": {"type": "boolean", "required": false, "default": false}
+      },
+      "response_status": [200, 401],
+      "response_schema": {
+        "200": {
+          "profile": "ProfileObject"
+        }
+      },
+      "authentication": "JWT",
+      "csrf": false,
+      "cookies": [],
+      "related_endpoints": [21, 23],
+      "media_related": false,
+      "streaming_related": false,
+      "notes": "Add TikTok profile to track for live recordings"
+    },
+    {
+      "id": 23,
+      "method": "DELETE",
+      "path": "/api/v2/followers/{accountId}/{id}",
+      "host": "raid.arkzynco.com",
+      "full_url": "https://raid.arkzynco.com/api/v2/followers/{accountId}/{id}",
+      "feature": "followers_tracking",
+      "description": "Remove a profile from tracking",
+      "static_status": "CONFIRMED_STATIC",
+      "dynamic_status": "NOT_TESTED",
+      "confidence": "MEDIUM",
+      "source_files": ["index-1.3.0.js"],
+      "calling_function": "y.remove(uid, s)",
+      "request_headers": {
+        "Authorization": "Bearer {token}"
+      },
+      "path_params": {
+        "accountId": {"type": "string", "source": "User/account ID"},
+        "id": {"type": "string", "source": "Follower/profile ID"}
+      },
+      "request_body": null,
+      "response_status": [200, 401],
+      "response_schema": {},
+      "authentication": "JWT",
+      "csrf": false,
+      "cookies": [],
+      "related_endpoints": [21, 22],
+      "media_related": false,
+      "streaming_related": false,
+      "notes": "Remove tracked profile"
+    },
+    {
+      "id": 24,
+      "method": "PUT",
+      "path": "/api/v2/followers/{accountId}/{id}",
+      "host": "raid.arkzynco.com",
+      "full_url": "https://raid.arkzynco.com/api/v2/followers/{accountId}/{id}",
+      "feature": "followers_tracking",
+      "description": "Update a tracked profile's settings / toggle status",
+      "static_status": "CONFIRMED_STATIC",
+      "dynamic_status": "NOT_TESTED",
+      "confidence": "MEDIUM",
+      "source_files": ["index-1.3.0.js"],
+      "calling_function": "y.toggleFollowerStatus(uid, s)",
+      "request_headers": {
+        "Authorization": "Bearer {token}"
+      },
+      "path_params": {
+        "accountId": {"type": "string", "source": "User/account ID"},
+        "id": {"type": "string", "source": "Follower/profile ID"}
+      },
+      "request_body": null,
+      "response_status": [200, 401],
+      "response_schema": {},
+      "authentication": "JWT",
+      "csrf": false,
+      "cookies": [],
+      "related_endpoints": [21, 23],
+      "media_related": false,
+      "streaming_related": false,
+      "notes": "Toggle active/inactive status - no body"
+    },
+    {
+      "id": 25,
+      "method": "GET",
+      "path": "/api/v2/followers/{accountId}/{pid}",
+      "host": "raid.arkzynco.com",
+      "full_url": "https://raid.arkzynco.com/api/v2/followers/{accountId}/{pid}",
+      "feature": "followers_tracking",
+      "description": "Get details for a specific tracked profile",
+      "static_status": "CONFIRMED_STATIC",
+      "dynamic_status": "NOT_TESTED",
+      "confidence": "MEDIUM",
+      "source_files": ["index-1.3.0.js"],
+      "calling_function": "y.follower(uid, s)",
+      "request_headers": {
+        "Authorization": "Bearer {token}"
+      },
+      "path_params": {
+        "accountId": {"type": "string", "source": "User/account ID"},
+        "pid": {"type": "string", "source": "Profile ID"}
+      },
+      "request_query_params": "s (params object)",
+      "response_status": [200, 401],
+      "response_schema": {
+        "200": "ProfileObject (single)"
+      },
+      "authentication": "JWT",
+      "csrf": false,
+      "cookies": [],
+      "related_endpoints": [21],
+      "media_related": false,
+      "streaming_related": false,
+      "notes": "Single follower detail"
+    },
+    {
+      "id": 26,
+      "method": "GET",
+      "path": "/api/v2/followers/{accountId}/{pid}/history",
+      "host": "raid.arkzynco.com",
+      "full_url": "https://raid.arkzynco.com/api/v2/followers/{accountId}/{pid}/history",
+      "feature": "followers_tracking",
+      "description": "Get live stream history for a tracked profile",
+      "static_status": "CONFIRMED_STATIC",
+      "dynamic_status": "NOT_TESTED",
+      "confidence": "MEDIUM",
+      "source_files": ["index-1.3.0.js"],
+      "calling_function": "y.usernameHistory(uid, s)",
+      "request_headers": {
+        "Authorization": "Bearer {token}"
+      },
+      "path_params": {
+        "accountId": {"type": "string", "source": "User/account ID"},
+        "pid": {"type": "string", "source": "Profile ID"}
+      },
+      "response_status": [200, 401],
+      "response_schema": {},
+      "authentication": "JWT",
+      "csrf": false,
+      "cookies": [],
+      "related_endpoints": [25],
+      "media_related": false,
+      "streaming_related": false,
+      "notes": "Past usernames/history for profile"
+    },
+    {
+      "id": 27,
+      "method": "GET",
+      "path": "/api/v2/followers/{accountId}/{pid}/rm",
+      "host": "raid.arkzynco.com",
+      "full_url": "https://raid.arkzynco.com/api/v2/followers/{accountId}/{pid}/rm",
+      "feature": "followers_tracking",
+      "description": "Get profile removal/recommendation info",
+      "static_status": "CONFIRMED_STATIC",
+      "dynamic_status": "NOT_TESTED",
+      "confidence": "LOW",
+      "source_files": ["index-1.3.0.js"],
+      "calling_function": "y.alsoBought(uid, s)",
+      "request_headers": {
+        "Authorization": "Bearer {token}"
+      },
+      "path_params": {
+        "accountId": {"type": "string", "source": "User/account ID"},
+        "pid": {"type": "string", "source": "Profile ID"}
+      },
+      "response_status": [200, 401],
+      "response_schema": {},
+      "authentication": "JWT",
+      "csrf": false,
+      "cookies": [],
+      "related_endpoints": [25],
+      "media_related": false,
+      "streaming_related": false,
+      "notes": "Function name 'alsoBought' suggests recommendations"
+    },
+    {
+      "id": 28,
+      "method": "POST",
+      "path": "/api/v2/followers/{accountId}/{pid}/fetch",
+      "host": "raid.arkzynco.com",
+      "full_url": "https://raid.arkzynco.com/api/v2/followers/{accountId}/{pid}/fetch",
+      "feature": "followers_tracking",
+      "description": "Force-fetch profile data from TikTok",
+      "static_status": "CONFIRMED_STATIC",
+      "dynamic_status": "NOT_TESTED",
+      "confidence": "MEDIUM",
+      "source_files": ["index-1.3.0.js"],
+      "calling_function": "y.fetchUnlock(uid, s)",
+      "request_headers": {
+        "Authorization": "Bearer {token}",
+        "Content-Type": "application/json"
+      },
+      "path_params": {
+        "accountId": {"type": "string", "source": "User/account ID"},
+        "pid": {"type": "string", "source": "Profile ID"}
+      },
+      "request_body": "s (full params object)",
+      "response_status": [200, 401],
+      "response_schema": {},
+      "authentication": "JWT",
+      "csrf": false,
+      "cookies": [],
+      "related_endpoints": [25, 30],
+      "media_related": false,
+      "streaming_related": false,
+      "notes": "Force refresh profile data"
+    },
+    {
+      "id": 29,
+      "method": "POST",
+      "path": "/api/v2/followers/{accountId}/{pid}/validate",
+      "host": "raid.arkzynco.com",
+      "full_url": "https://raid.arkzynco.com/api/v2/followers/{accountId}/{pid}/validate",
+      "feature": "followers_tracking",
+      "description": "Validate and archive profile streams",
+      "static_status": "CONFIRMED_STATIC",
+      "dynamic_status": "NOT_TESTED",
+      "confidence": "MEDIUM",
+      "source_files": ["index-1.3.0.js"],
+      "calling_function": "y.requestValidation(uid, s, opts)",
+      "request_headers": {
+        "Authorization": "Bearer {token}",
+        "Content-Type": "application/json"
+      },
+      "path_params": {
+        "accountId": {"type": "string", "source": "User/account ID"},
+        "pid": {"type": "string", "source": "Profile ID"}
+      },
+      "request_body": {
+        "confirm_after_check": {"type": "boolean", "required": false},
+        "rooms_to_validate": {"type": "number", "required": false},
+        "force_revalidate": {"type": "boolean", "required": false}
+      },
+      "response_status": [200, 401],
+      "response_schema": {},
+      "authentication": "JWT",
+      "csrf": false,
+      "cookies": [],
+      "related_endpoints": [28, 30],
+      "media_related": false,
+      "streaming_related": false,
+      "notes": "Archive validation with polling"
+    },
+    {
+      "id": 30,
+      "method": "POST",
+      "path": "/api/v2/followers/{accountId}/{pid}/deep-check",
+      "host": "raid.arkzynco.com",
+      "full_url": "https://raid.arkzynco.com/api/v2/followers/{accountId}/{pid}/deep-check",
+      "feature": "followers_tracking",
+      "description": "Deep archive check for profile",
+      "static_status": "CONFIRMED_STATIC",
+      "dynamic_status": "NOT_TESTED",
+      "confidence": "MEDIUM",
+      "source_files": ["index-1.3.0.js"],
+      "calling_function": "y.deepCheckArchive(uid, s)",
+      "request_headers": {
+        "Authorization": "Bearer {token}"
+      },
+      "path_params": {
+        "accountId": {"type": "string", "source": "User/account ID"},
+        "pid": {"type": "string", "source": "Profile ID"}
+      },
+      "request_body": null,
+      "response_status": [200, 401],
+      "response_schema": {},
+      "authentication": "JWT",
+      "csrf": false,
+      "cookies": [],
+      "related_endpoints": [29],
+      "media_related": false,
+      "streaming_related": false,
+      "notes": "Deep archive validation"
+    },
+    {
+      "id": 31,
+      "method": "POST",
+      "path": "/api/v2/followers/{accountId}/{pid}/report",
+      "host": "raid.arkzynco.com",
+      "full_url": "https://raid.arkzynco.com/api/v2/followers/{accountId}/{pid}/report",
+      "feature": "followers_tracking",
+      "description": "Report a tracked profile",
+      "static_status": "CONFIRMED_STATIC",
+      "dynamic_status": "CONFIRMED_401",
+      "confidence": "MEDIUM",
+      "source_files": ["index-1.3.0.js"],
+      "calling_function": "y.reportUnlockError(uid, s)",
+      "request_headers": {
+        "Authorization": "Bearer {token}"
+      },
+      "path_params": {
+        "accountId": {"type": "string", "source": "User/account ID"},
+        "pid": {"type": "string", "source": "Profile ID"}
+      },
+      "response_status": [200, 401],
+      "response_schema": {},
+      "authentication": "JWT",
+      "csrf": false,
+      "cookies": [],
+      "related_endpoints": [25],
+      "media_related": false,
+      "streaming_related": false,
+      "notes": "Report profile issue"
+    },
+    {
+      "id": 32,
+      "method": "POST",
+      "path": "/api/v2/followers/{accountId}/{pid}/following/fetch",
+      "host": "raid.arkzynco.com",
+      "full_url": "https://raid.arkzynco.com/api/v2/followers/{accountId}/{pid}/following/fetch",
+      "feature": "followers_tracking",
+      "description": "Force-fetch following list for a profile",
+      "static_status": "CONFIRMED_STATIC",
+      "dynamic_status": "NOT_TESTED",
+      "confidence": "MEDIUM",
+      "source_files": ["index-1.3.0.js"],
+      "calling_function": "y.fetchFollowing(uid, s, refetch)",
+      "request_headers": {
+        "Authorization": "Bearer {token}",
+        "Content-Type": "application/json"
+      },
+      "path_params": {
+        "accountId": {"type": "string", "source": "User/account ID"},
+        "pid": {"type": "string", "source": "Profile ID"}
+      },
+      "request_body": {
+        "refetch": {"type": "boolean", "default": false}
+      },
+      "response_status": [200, 401],
+      "response_schema": {},
+      "authentication": "JWT",
+      "csrf": false,
+      "cookies": [],
+      "related_endpoints": [33],
+      "media_related": false,
+      "streaming_related": false,
+      "notes": "Force refresh following list"
+    },
+    {
+      "id": 33,
+      "method": "GET",
+      "path": "/api/v2/followers/{accountId}/{uid}/following",
+      "host": "raid.arkzynco.com",
+      "full_url": "https://raid.arkzynco.com/api/v2/followers/{accountId}/{uid}/following",
+      "feature": "followers_tracking",
+      "description": "Get following list for a profile",
+      "static_status": "CONFIRMED_STATIC",
+      "dynamic_status": "NOT_TESTED",
+      "confidence": "MEDIUM",
+      "source_files": ["index-1.3.0.js"],
+      "calling_function": "y.followingList(uid, s)",
+      "request_headers": {
+        "Authorization": "Bearer {token}"
+      },
+      "path_params": {
+        "accountId": {"type": "string", "source": "User/account ID"},
+        "uid": {"type": "string", "source": "TikTok UID"}
+      },
+      "request_query_params": "s (pagination params)",
+      "response_status": [200, 401],
+      "response_schema": {
+        "200": "paginated list of following profiles"
+      },
+      "authentication": "JWT",
+      "csrf": false,
+      "cookies": [],
+      "related_endpoints": [32],
+      "media_related": false,
+      "streaming_related": false,
+      "notes": "Paginated following list"
+    },
+    {
+      "id": 34,
+      "method": "GET",
+      "path": "/api/v2/followers/{accountId}/{uid}/deep-check",
+      "host": "raid.arkzynco.com",
+      "full_url": "https://raid.arkzynco.com/api/v2/followers/{accountId}/{uid}/deep-check",
+      "feature": "followers_tracking",
+      "description": "Deep check (GET variant)",
+      "static_status": "CONFIRMED_STATIC",
+      "dynamic_status": "NOT_TESTED",
+      "confidence": "LOW",
+      "source_files": ["index-1.3.0.js"],
+      "calling_function": "unknown",
+      "request_headers": {
+        "Authorization": "Bearer {token}"
+      },
+      "path_params": {
+        "accountId": {"type": "string", "source": "User/account ID"},
+        "uid": {"type": "string", "source": "TikTok UID"}
+      },
+      "response_status": [200, 401],
+      "response_schema": {},
+      "authentication": "JWT",
+      "csrf": false,
+      "cookies": [],
+      "related_endpoints": [30],
+      "media_related": false,
+      "streaming_related": false,
+      "notes": "GET variant of deep-check (vs POST /deep-check)"
+    },
+    {
+      "id": 35,
+      "method": "GET",
+      "path": "/api/v2/followers/discover/{accountId}",
+      "host": "raid.arkzynco.com",
+      "full_url": "https://raid.arkzynco.com/api/v2/followers/discover/{accountId}",
+      "feature": "followers_social",
+      "description": "Discover suggested TikTok profiles to track",
+      "static_status": "CONFIRMED_STATIC",
+      "dynamic_status": "CONFIRMED_401",
+      "confidence": "HIGH",
+      "source_files": ["index-1.3.0.js"],
+      "calling_function": "y.discover(uid, s)",
+      "request_headers": {
+        "Authorization": "Bearer {token}"
+      },
+      "path_params": {
+        "accountId": {"type": "string", "source": "User/account ID"}
+      },
+      "request_query_params": "s (params)",
+      "response_status": [200, 401],
+      "response_schema": {
+        "200": "list of suggested profiles"
+      },
+      "authentication": "JWT",
+      "csrf": false,
+      "cookies": [],
+      "related_endpoints": [36, 37, 38, 39, 40, 41],
+      "media_related": false,
+      "streaming_related": false,
+      "notes": "Discover page profiles"
+    },
+    {
+      "id": 36,
+      "method": "GET",
+      "path": "/api/v2/followers/discover/{accountId}/bubbles",
+      "host": "raid.arkzynco.com",
+      "full_url": "https://raid.arkzynco.com/api/v2/followers/discover/{accountId}/bubbles",
+      "feature": "followers_social",
+      "description": "Discover bubble-style suggested profiles",
+      "static_status": "CONFIRMED_STATIC",
+      "dynamic_status": "NOT_TESTED",
+      "confidence": "MEDIUM",
+      "source_files": ["index-1.3.0.js"],
+      "calling_function": "y.discoverBubbles(uid, s)",
+      "request_headers": {
+        "Authorization": "Bearer {token}"
+      },
+      "path_params": {
+        "accountId": {"type": "string", "source": "User/account ID"}
+      },
+      "request_query_params": "s (params)",
+      "response_status": [200, 401],
+      "response_schema": {},
+      "authentication": "JWT",
+      "csrf": false,
+      "cookies": [],
+      "related_endpoints": [35],
+      "media_related": false,
+      "streaming_related": false,
+      "notes": "Bubble UI style profile suggestions"
+    },
+    {
+      "id": 37,
+      "method": "GET",
+      "path": "/api/v2/followers/explore/lives/{accountId}",
+      "host": "raid.arkzynco.com",
+      "full_url": "https://raid.arkzynco.com/api/v2/followers/explore/lives/{accountId}",
+      "feature": "followers_social",
+      "description": "Explore currently live profiles",
+      "static_status": "CONFIRMED_STATIC",
+      "dynamic_status": "CONFIRMED_401",
+      "confidence": "HIGH",
+      "source_files": ["index-1.3.0.js"],
+      "calling_function": "y.exploreLives(uid, s)",
+      "request_headers": {
+        "Authorization": "Bearer {token}"
+      },
+      "path_params": {
+        "accountId": {"type": "string", "source": "User/account ID"}
+      },
+      "request_query_params": "s (params)",
+      "response_status": [200, 401],
+      "response_schema": {
+        "200": "list of currently live profiles"
+      },
+      "authentication": "JWT",
+      "csrf": false,
+      "cookies": [],
+      "related_endpoints": [35],
+      "media_related": false,
+      "streaming_related": true,
+      "notes": "Live stream exploration"
+    },
+    {
+      "id": 38,
+      "method": "GET",
+      "path": "/api/v2/followers/ranked/{accountId}",
+      "host": "raid.arkzynco.com",
+      "full_url": "https://raid.arkzynco.com/api/v2/followers/ranked/{accountId}",
+      "feature": "followers_social",
+      "description": "Get ranked/popular profiles",
+      "static_status": "CONFIRMED_STATIC",
+      "dynamic_status": "CONFIRMED_401",
+      "confidence": "HIGH",
+      "source_files": ["index-1.3.0.js"],
+      "calling_function": "y.ranked(uid, s)",
+      "request_headers": {
+        "Authorization": "Bearer {token}"
+      },
+      "path_params": {
+        "accountId": {"type": "string", "source": "User/account ID"}
+      },
+      "request_query_params": "s (params)",
+      "response_status": [200, 401],
+      "response_schema": {
+        "200": "list of ranked profiles"
+      },
+      "authentication": "JWT",
+      "csrf": false,
+      "cookies": [],
+      "related_endpoints": [35],
+      "media_related": false,
+      "streaming_related": false,
+      "notes": "Ranked/popular profiles"
+    },
+    {
+      "id": 39,
+      "method": "GET",
+      "path": "/api/v2/followers/search/{accountId}",
+      "host": "raid.arkzynco.com",
+      "full_url": "https://raid.arkzynco.com/api/v2/followers/search/{accountId}",
+      "feature": "followers_social",
+      "description": "Search for TikTok profiles",
+      "static_status": "CONFIRMED_STATIC",
+      "dynamic_status": "CONFIRMED_401",
+      "confidence": "HIGH",
+      "source_files": ["index-1.3.0.js"],
+      "calling_function": "y.search(uid, s)",
+      "request_headers": {
+        "Authorization": "Bearer {token}"
+      },
+      "path_params": {
+        "accountId": {"type": "string", "source": "User/account ID"}
+      },
+      "request_query_params": "s (search params, likely includes 'q')",
+      "response_status": [200, 401],
+      "response_schema": {
+        "200": "list of matching profiles"
+      },
+      "authentication": "JWT",
+      "csrf": false,
+      "cookies": [],
+      "related_endpoints": [35],
+      "media_related": false,
+      "streaming_related": false,
+      "notes": "Search TikTok profiles"
+    },
+    {
+      "id": 40,
+      "method": "GET",
+      "path": "/api/v2/followers/similar/{accountId}/{pid}",
+      "host": "raid.arkzynco.com",
+      "full_url": "https://raid.arkzynco.com/api/v2/followers/similar/{accountId}/{pid}",
+      "feature": "followers_social",
+      "description": "Get similar profiles to a given profile",
+      "static_status": "CONFIRMED_STATIC",
+      "dynamic_status": "NOT_TESTED",
+      "confidence": "MEDIUM",
+      "source_files": ["index-1.3.0.js"],
+      "calling_function": "y.similar(uid, fid, s)",
+      "request_headers": {
+        "Authorization": "Bearer {token}"
+      },
+      "path_params": {
+        "accountId": {"type": "string", "source": "User/account ID"},
+        "pid": {"type": "string", "source": "Profile ID"}
+      },
+      "request_query_params": "s (params)",
+      "response_status": [200, 401],
+      "response_schema": {
+        "200": "list of similar profiles"
+      },
+      "authentication": "JWT",
+      "csrf": false,
+      "cookies": [],
+      "related_endpoints": [35],
+      "media_related": false,
+      "streaming_related": false,
+      "notes": "Similar profile recommendations"
+    },
+    {
+      "id": 41,
+      "method": "GET",
+      "path": "/api/v2/followers/suggest/{accountId}",
+      "host": "raid.arkzynco.com",
+      "full_url": "https://raid.arkzynco.com/api/v2/followers/suggest/{accountId}",
+      "feature": "followers_social",
+      "description": "Get suggested profiles to track",
+      "static_status": "CONFIRMED_STATIC",
+      "dynamic_status": "CONFIRMED_401",
+      "confidence": "HIGH",
+      "source_files": ["index-1.3.0.js"],
+      "calling_function": "y.suggest(uid, s)",
+      "request_headers": {
+        "Authorization": "Bearer {token}"
+      },
+      "path_params": {
+        "accountId": {"type": "string", "source": "User/account ID"}
+      },
+      "request_query_params": "s (params)",
+      "response_status": [200, 401],
+      "response_schema": {
+        "200": "list of suggested profiles"
+      },
+      "authentication": "JWT",
+      "csrf": false,
+      "cookies": [],
+      "related_endpoints": [35],
+      "media_related": false,
+      "streaming_related": false,
+      "notes": "Profile suggestions"
+    },
+    {
+      "id": 42,
+      "method": "POST",
+      "path": "/api/v2/followers/{accountId}/{pid}/like",
+      "host": "raid.arkzynco.com",
+      "full_url": "https://raid.arkzynco.com/api/v2/followers/{accountId}/{pid}/like",
+      "feature": "followers_social",
+      "description": "Like/unlike a tracked profile",
+      "static_status": "CONFIRMED_STATIC",
+      "dynamic_status": "NOT_TESTED",
+      "confidence": "MEDIUM",
+      "source_files": ["index-1.3.0.js"],
+      "calling_function": "y.like(uid, s=1)",
+      "request_headers": {
+        "Authorization": "Bearer {token}",
+        "Content-Type": "application/json"
+      },
+      "path_params": {
+        "accountId": {"type": "string", "source": "User/account ID"},
+        "pid": {"type": "string", "source": "Profile ID"}
+      },
+      "request_body": {
+        "status": {"type": "number", "enum": [0, 1], "description": "1=like, 0=unlike", "default": 1}
+      },
+      "response_status": [200, 401],
+      "response_schema": {},
+      "authentication": "JWT",
+      "csrf": false,
+      "cookies": [],
+      "related_endpoints": [43],
+      "media_related": false,
+      "streaming_related": false,
+      "notes": "Toggle like with status=1 (like) or status=0 (unlike)"
+    },
+    {
+      "id": 43,
+      "method": "GET",
+      "path": "/api/v2/followers/{accountId}/likes",
+      "host": "raid.arkzynco.com",
+      "full_url": "https://raid.arkzynco.com/api/v2/followers/{accountId}/likes",
+      "feature": "followers_social",
+      "description": "Get list of liked profiles",
+      "static_status": "CONFIRMED_STATIC",
+      "dynamic_status": "CONFIRMED_401",
+      "confidence": "HIGH",
+      "source_files": ["index-1.3.0.js"],
+      "calling_function": "y.likes(uid, s)",
+      "request_headers": {
+        "Authorization": "Bearer {token}"
+      },
+      "path_params": {
+        "accountId": {"type": "string", "source": "User/account ID"}
+      },
+      "request_query_params": "s (params)",
+      "response_status": [200, 401],
+      "response_schema": {
+        "200": "list of liked profiles"
+      },
+      "authentication": "JWT",
+      "csrf": false,
+      "cookies": [],
+      "related_endpoints": [42],
+      "media_related": false,
+      "streaming_related": false,
+      "notes": "Liked profiles list"
+    },
+    {
+      "id": 44,
+      "method": "POST",
+      "path": "/api/v2/followers/hide/{accountId}/{pid}",
+      "host": "raid.arkzynco.com",
+      "full_url": "https://raid.arkzynco.com/api/v2/followers/hide/{accountId}/{pid}",
+      "feature": "followers_social",
+      "description": "Hide a profile from discovery/recommendations",
+      "static_status": "CONFIRMED_STATIC",
+      "dynamic_status": "NOT_TESTED",
+      "confidence": "MEDIUM",
+      "source_files": ["index-1.3.0.js"],
+      "calling_function": "y.hide(uid, s)",
+      "request_headers": {
+        "Authorization": "Bearer {token}"
+      },
+      "path_params": {
+        "accountId": {"type": "string", "source": "User/account ID"},
+        "pid": {"type": "string", "source": "Profile ID"}
+      },
+      "response_status": [200, 401],
+      "response_schema": {},
+      "authentication": "JWT",
+      "csrf": false,
+      "cookies": [],
+      "related_endpoints": [35],
+      "media_related": false,
+      "streaming_related": false,
+      "notes": "Hide profile from recommendations"
+    },
+    {
+      "id": 45,
+      "method": "POST",
+      "path": "/api/v2/followers/{accountId}/report",
+      "host": "raid.arkzynco.com",
+      "full_url": "https://raid.arkzynco.com/api/v2/followers/{accountId}/report",
+      "feature": "followers_social",
+      "description": "Report profiles (paginated)",
+      "static_status": "CONFIRMED_STATIC",
+      "dynamic_status": "CONFIRMED_401",
+      "confidence": "MEDIUM",
+      "source_files": ["index-1.3.0.js"],
+      "calling_function": "y.report(uid, s)",
+      "request_headers": {
+        "Authorization": "Bearer {token}",
+        "Content-Type": "application/json"
+      },
+      "path_params": {
+        "accountId": {"type": "string", "source": "User/account ID"}
+      },
+      "request_body": {
+        "page": {"type": "number", "required": true}
+      },
+      "response_status": [200, 401],
+      "response_schema": {},
+      "authentication": "JWT",
+      "csrf": false,
+      "cookies": [],
+      "related_endpoints": [31],
+      "media_related": false,
+      "streaming_related": false,
+      "notes": "Paginated report listing"
+    },
+    {
+      "id": 46,
+      "method": "GET",
+      "path": "/api/v2/records/{accountId}",
+      "host": "raid.arkzynco.com",
+      "full_url": "https://raid.arkzynco.com/api/v2/records/{accountId}",
+      "feature": "records",
+      "description": "List all recorded streams",
+      "static_status": "CONFIRMED_STATIC",
+      "dynamic_status": "CONFIRMED_401",
+      "confidence": "HIGH",
+      "source_files": ["index-1.3.0.js"],
+      "calling_function": "P.records(uid, s)",
+      "request_headers": {
+        "Authorization": "Bearer {token}"
+      },
+      "path_params": {
+        "accountId": {"type": "string", "source": "User/account ID"}
+      },
+      "request_query_params": {
+        "page": {"type": "number", "default": 1},
+        "limit": {"type": "number", "default": 20},
+        "sort": {"type": "string", "default": "created_at"},
+        "order": {"type": "string", "enum": ["asc", "desc"], "default": "desc"},
+        "dateRange": {"type": "string", "description": "Date range filter"},
+        "status": {"type": "string", "description": "Status filter"}
+      },
+      "response_status": [200, 401],
+      "response_schema": {
+        "200": {
+          "data": "[RecordObject]",
+          "meta": {"current_page": "number", "last_page": "number", "per_page": "number", "total": "number"}
+        }
+      },
+      "authentication": "JWT",
+      "csrf": false,
+      "cookies": [],
+      "related_endpoints": [47, 48, 49, 50, 51, 52],
+      "media_related": true,
+      "streaming_related": true,
+      "notes": "Main records list with pagination"
+    },
+    {
+      "id": 47,
+      "method": "GET",
+      "path": "/api/v2/records/{accountId}/{recordId}",
+      "host": "raid.arkzynco.com",
+      "full_url": "https://raid.arkzynco.com/api/v2/records/{accountId}/{recordId}",
+      "feature": "records",
+      "description": "Get a specific recording",
+      "static_status": "CONFIRMED_STATIC",
+      "dynamic_status": "NOT_TESTED",
+      "confidence": "MEDIUM",
+      "source_files": ["index-1.3.0.js"],
+      "calling_function": "P.getRecord(uid, recordId)",
+      "request_headers": {
+        "Authorization": "Bearer {token}"
+      },
+      "path_params": {
+        "accountId": {"type": "string", "source": "User/account ID"},
+        "recordId": {"type": "string", "source": "Record ID"}
+      },
+      "response_status": [200, 401],
+      "response_schema": {
+        "200": "RecordObject (single)"
+      },
+      "authentication": "JWT",
+      "csrf": false,
+      "cookies": [],
+      "related_endpoints": [46, 55],
+      "media_related": true,
+      "streaming_related": true,
+      "notes": "Single record detail"
+    },
+    {
+      "id": 48,
+      "method": "POST",
+      "path": "/api/v2/records/new/{accountId}",
+      "host": "raid.arkzynco.com",
+      "full_url": "https://raid.arkzynco.com/api/v2/records/new/{accountId}",
+      "feature": "records",
+      "description": "Create a new recording entry",
+      "static_status": "CONFIRMED_STATIC",
+      "dynamic_status": "NOT_TESTED",
+      "confidence": "MEDIUM",
+      "source_files": ["index-1.3.0.js"],
+      "calling_function": "P.startRecord(uid, s)",
+      "request_headers": {
+        "Authorization": "Bearer {token}",
+        "Content-Type": "application/json"
+      },
+      "path_params": {
+        "accountId": {"type": "string", "source": "User/account ID"}
+      },
+      "request_body": "s (record config object)",
+      "response_status": [200, 401],
+      "response_schema": {},
+      "authentication": "JWT",
+      "csrf": false,
+      "cookies": [],
+      "related_endpoints": [46],
+      "media_related": true,
+      "streaming_related": true,
+      "notes": "Start new recording"
+    },
+    {
+      "id": 49,
+      "method": "DELETE",
+      "path": "/api/v2/records/{accountId}/{recordId}",
+      "host": "raid.arkzynco.com",
+      "full_url": "https://raid.arkzynco.com/api/v2/records/{accountId}/{recordId}",
+      "feature": "records",
+      "description": "Delete a specific recording",
+      "static_status": "CONFIRMED_STATIC",
+      "dynamic_status": "NOT_TESTED",
+      "confidence": "MEDIUM",
+      "source_files": ["index-1.3.0.js"],
+      "calling_function": "P.removeRecord(uid, recordId)",
+      "request_headers": {
+        "Authorization": "Bearer {token}"
+      },
+      "path_params": {
+        "accountId": {"type": "string", "source": "User/account ID"},
+        "recordId": {"type": "string", "source": "Record ID"}
+      },
+      "request_body": null,
+      "response_status": [200, 401],
+      "response_schema": {},
+      "authentication": "JWT",
+      "csrf": false,
+      "cookies": [],
+      "related_endpoints": [46, 50, 51, 52],
+      "media_related": true,
+      "streaming_related": false,
+      "notes": "Delete single recording"
+    },
+    {
+      "id": 50,
+      "method": "DELETE",
+      "path": "/api/v2/records/{accountId}/all",
+      "host": "raid.arkzynco.com",
+      "full_url": "https://raid.arkzynco.com/api/v2/records/{accountId}/all",
+      "feature": "records",
+      "description": "Delete all recordings for an account",
+      "static_status": "CONFIRMED_STATIC",
+      "dynamic_status": "NOT_TESTED",
+      "confidence": "MEDIUM",
+      "source_files": ["index-1.3.0.js"],
+      "calling_function": "P.deleteAllRecords(uid)",
+      "request_headers": {
+        "Authorization": "Bearer {token}"
+      },
+      "path_params": {
+        "accountId": {"type": "string", "source": "User/account ID"}
+      },
+      "request_body": null,
+      "response_status": [200, 401],
+      "response_schema": {},
+      "authentication": "JWT",
+      "csrf": false,
+      "cookies": [],
+      "related_endpoints": [46, 49],
+      "media_related": true,
+      "streaming_related": false,
+      "notes": "Bulk delete all recordings"
+    },
+    {
+      "id": 51,
+      "method": "DELETE",
+      "path": "/api/v2/records/follower/{accountId}/{pid}",
+      "host": "raid.arkzynco.com",
+      "full_url": "https://raid.arkzynco.com/api/v2/records/follower/{accountId}/{pid}",
+      "feature": "records",
+      "description": "Delete all recordings for a specific follower",
+      "static_status": "CONFIRMED_STATIC",
+      "dynamic_status": "CONFIRMED_401",
+      "confidence": "MEDIUM",
+      "source_files": ["index-1.3.0.js"],
+      "calling_function": "P.removeUserRecords(uid, followerId)",
+      "request_headers": {
+        "Authorization": "Bearer {token}"
+      },
+      "path_params": {
+        "accountId": {"type": "string", "source": "User/account ID"},
+        "pid": {"type": "string", "source": "Follower/profile ID"}
+      },
+      "request_body": null,
+      "response_status": [200, 401],
+      "response_schema": {},
+      "authentication": "JWT",
+      "csrf": false,
+      "cookies": [],
+      "related_endpoints": [46, 49],
+      "media_related": true,
+      "streaming_related": false,
+      "notes": "Delete recordings by follower"
+    },
+    {
+      "id": 52,
+      "method": "POST",
+      "path": "/api/v2/records/{accountId}/delete-selected",
+      "host": "raid.arkzynco.com",
+      "full_url": "https://raid.arkzynco.com/api/v2/records/{accountId}/delete-selected",
+      "feature": "records",
+      "description": "Bulk delete selected recordings",
+      "static_status": "CONFIRMED_STATIC",
+      "dynamic_status": "NOT_TESTED",
+      "confidence": "MEDIUM",
+      "source_files": ["index-1.3.0.js"],
+      "calling_function": "P.removeSelectedRecords(uid, ids)",
+      "request_headers": {
+        "Authorization": "Bearer {token}",
+        "Content-Type": "application/json"
+      },
+      "path_params": {
+        "accountId": {"type": "string", "source": "User/account ID"}
+      },
+      "request_body": {
+        "ids": {"type": "array", "items": "string", "required": true, "description": "Array of record IDs to delete"}
+      },
+      "response_status": [200, 401],
+      "response_schema": {},
+      "authentication": "JWT",
+      "csrf": false,
+      "cookies": [],
+      "related_endpoints": [46, 49],
+      "media_related": true,
+      "streaming_related": false,
+      "notes": "Bulk delete with array of IDs"
+    },
+    {
+      "id": 53,
+      "method": "POST",
+      "path": "/api/v2/records/{accountId}/{recordId}/attach",
+      "host": "raid.arkzynco.com",
+      "full_url": "https://raid.arkzynco.com/api/v2/records/{accountId}/{recordId}/attach",
+      "feature": "records",
+      "description": "Attach recording to a profile",
+      "static_status": "CONFIRMED_STATIC",
+      "dynamic_status": "NOT_TESTED",
+      "confidence": "MEDIUM",
+      "source_files": ["index-1.3.0.js"],
+      "calling_function": "P.attachRecord(uid, recordId)",
+      "request_headers": {
+        "Authorization": "Bearer {token}"
+      },
+      "path_params": {
+        "accountId": {"type": "string", "source": "User/account ID"},
+        "recordId": {"type": "string", "source": "Record ID"}
+      },
+      "request_body": null,
+      "response_status": [200, 401],
+      "response_schema": {},
+      "authentication": "JWT",
+      "csrf": false,
+      "cookies": [],
+      "related_endpoints": [46],
+      "media_related": true,
+      "streaming_related": false,
+      "notes": "Attach recording to profile"
+    },
+    {
+      "id": 54,
+      "method": "PUT",
+      "path": "/api/v2/records/{accountId}/{recordId}/fix",
+      "host": "raid.arkzynco.com",
+      "full_url": "https://raid.arkzynco.com/api/v2/records/{accountId}/{recordId}/fix",
+      "feature": "records",
+      "description": "Fix/rebuild a corrupted recording",
+      "static_status": "CONFIRMED_STATIC",
+      "dynamic_status": "NOT_TESTED",
+      "confidence": "MEDIUM",
+      "source_files": ["index-1.3.0.js"],
+      "calling_function": "P.buildVideo(uid, recordId)",
+      "request_headers": {
+        "Authorization": "Bearer {token}"
+      },
+      "path_params": {
+        "accountId": {"type": "string", "source": "User/account ID"},
+        "recordId": {"type": "string", "source": "Record ID"}
+      },
+      "request_body": null,
+      "response_status": [200, 401],
+      "response_schema": {},
+      "authentication": "JWT",
+      "csrf": false,
+      "cookies": [],
+      "related_endpoints": [55],
+      "media_related": true,
+      "streaming_related": false,
+      "notes": "Rebuild video - triggers video_rebuilt FCM event"
+    },
+    {
+      "id": 55,
+      "method": "POST",
+      "path": "/api/v2/records/{accountId}/{recordId}/ups",
+      "host": "raid.arkzynco.com",
+      "full_url": "https://raid.arkzynco.com/api/v2/records/{accountId}/{recordId}/ups",
+      "feature": "records",
+      "description": "Get video URL (encrypted token + quality)",
+      "static_status": "CONFIRMED_STATIC",
+      "dynamic_status": "NOT_TESTED",
+      "confidence": "HIGH",
+      "source_files": ["index-1.3.0.js"],
+      "calling_function": "P.getVideoUrl(uid, {record, evt, quality})",
+      "request_headers": {
+        "Authorization": "Bearer {token}",
+        "Content-Type": "application/json"
+      },
+      "path_params": {
+        "accountId": {"type": "string", "source": "User/account ID"},
+        "recordId": {"type": "string", "source": "Record ID"}
+      },
+      "request_body": {
+        "edt": {"type": "string", "required": true, "description": "base64(JSON({e: eventType, t: unixTimestamp}))"},
+        "quality": {"type": "string", "enum": ["216p", "360p", "480p", "720p"], "required": true}
+      },
+      "response_status": [200, 401],
+      "response_schema": {
+        "200": {
+          "video": "string (CDN URL)",
+          "record": "RecordObject"
+        }
+      },
+      "authentication": "JWT",
+      "csrf": false,
+      "cookies": [],
+      "related_endpoints": [47],
+      "media_related": true,
+      "streaming_related": true,
+      "notes": "CRITICAL ENDPOINT - returns video CDN URL. EDT = base64(JSON({e: eventType, t: unixTimestamp}))"
+    },
+    {
+      "id": 56,
+      "method": "POST",
+      "path": "/api/v2/records/{accountId}/{recordId}/downloaded",
+      "host": "raid.arkzynco.com",
+      "full_url": "https://raid.arkzynco.com/api/v2/records/{accountId}/{recordId}/downloaded",
+      "feature": "records",
+      "description": "Mark recording as downloaded",
+      "static_status": "CONFIRMED_STATIC",
+      "dynamic_status": "NOT_TESTED",
+      "confidence": "MEDIUM",
+      "source_files": ["index-1.3.0.js"],
+      "calling_function": "P.setDownloaded(uid, recordId, status)",
+      "request_headers": {
+        "Authorization": "Bearer {token}",
+        "Content-Type": "application/json"
+      },
+      "path_params": {
+        "accountId": {"type": "string", "source": "User/account ID"},
+        "recordId": {"type": "string", "source": "Record ID"}
+      },
+      "request_body": {
+        "status": {"type": "boolean", "required": true}
+      },
+      "response_status": [200, 401],
+      "response_schema": {},
+      "authentication": "JWT",
+      "csrf": false,
+      "cookies": [],
+      "related_endpoints": [55],
+      "media_related": true,
+      "streaming_related": false,
+      "notes": "Track download status"
+    },
+    {
+      "id": 57,
+      "method": "GET",
+      "path": "/api/v2/records/{accountId}/storage-usage",
+      "host": "raid.arkzynco.com",
+      "full_url": "https://raid.arkzynco.com/api/v2/records/{accountId}/storage-usage",
+      "feature": "records",
+      "description": "Get storage usage statistics",
+      "static_status": "CONFIRMED_STATIC",
+      "dynamic_status": "CONFIRMED_401",
+      "confidence": "HIGH",
+      "source_files": ["index-1.3.0.js"],
+      "calling_function": "P.getStorageUsage(uid, s)",
+      "request_headers": {
+        "Authorization": "Bearer {token}"
+      },
+      "path_params": {
+        "accountId": {"type": "string", "source": "User/account ID"}
+      },
+      "request_query_params": "s (params)",
+      "response_status": [200, 401],
+      "response_schema": {
+        "200": "storage usage object"
+      },
+      "authentication": "JWT",
+      "csrf": false,
+      "cookies": [],
+      "related_endpoints": [46],
+      "media_related": true,
+      "streaming_related": false,
+      "notes": "Storage usage statistics"
+    },
+    {
+      "id": 58,
+      "method": "GET",
+      "path": "/api/v2/records/follower/{accountId}/{pid}",
+      "host": "raid.arkzynco.com",
+      "full_url": "https://raid.arkzynco.com/api/v2/records/follower/{accountId}/{pid}",
+      "feature": "records",
+      "description": "Get recordings filtered by follower",
+      "static_status": "CONFIRMED_STATIC",
+      "dynamic_status": "NOT_TESTED",
+      "confidence": "MEDIUM",
+      "source_files": ["index-1.3.0.js"],
+      "calling_function": "unknown",
+      "request_headers": {
+        "Authorization": "Bearer {token}"
+      },
+      "path_params": {
+        "accountId": {"type": "string", "source": "User/account ID"},
+        "pid": {"type": "string", "source": "Follower/profile ID"}
+      },
+      "response_status": [200, 401],
+      "response_schema": {
+        "200": {
+          "data": "[RecordObject]",
+          "meta": "PaginationMeta"
+        }
+      },
+      "authentication": "JWT",
+      "csrf": false,
+      "cookies": [],
+      "related_endpoints": [46],
+      "media_related": true,
+      "streaming_related": true,
+      "notes": "Records filtered by follower"
+    },
+    {
+      "id": 59,
+      "method": "POST",
+      "path": "/api/v2/broadcasts/{accountId}",
+      "host": "raid.arkzynco.com",
+      "full_url": "https://raid.arkzynco.com/api/v2/broadcasts/{accountId}",
+      "feature": "streaming_broadcast",
+      "description": "Build broadcast data for live stream",
+      "static_status": "CONFIRMED_STATIC",
+      "dynamic_status": "CONFIRMED_401",
+      "confidence": "HIGH",
+      "source_files": ["index-1.3.0.js"],
+      "calling_function": "P.broadcasts(uid, s)",
+      "request_headers": {
+        "Authorization": "Bearer {token}",
+        "Content-Type": "application/json"
+      },
+      "path_params": {
+        "accountId": {"type": "string", "source": "User/account ID"}
+      },
+      "request_body": {
+        "data": {"type": "object", "required": true}
+      },
+      "response_status": [200, 401],
+      "response_schema": {},
+      "authentication": "JWT",
+      "csrf": false,
+      "cookies": [],
+      "related_endpoints": [60, 61, 62],
+      "media_related": true,
+      "streaming_related": true,
+      "notes": "Build broadcast data - wrapped in {data: s}"
+    },
+    {
+      "id": 60,
+      "method": "POST",
+      "path": "/api/streams/record-now/{accountId}",
+      "host": "raid.arkzynco.com",
+      "full_url": "https://raid.arkzynco.com/api/streams/record-now/{accountId}",
+      "feature": "streaming_broadcast",
+      "description": "Start recording a live stream immediately",
+      "static_status": "CONFIRMED_STATIC",
+      "dynamic_status": "CONFIRMED_401",
+      "confidence": "HIGH",
+      "source_files": ["index-1.3.0.js"],
+      "calling_function": "fe.recordNow(uid, username)",
+      "request_headers": {
+        "Authorization": "Bearer {token}",
+        "Content-Type": "application/json"
+      },
+      "path_params": {
+        "accountId": {"type": "string", "source": "User/account ID"}
+      },
+      "request_body": {
+        "username": {"type": "string", "required": true}
+      },
+      "response_status": [200, 401],
+      "response_schema": {},
+      "authentication": "JWT",
+      "csrf": false,
+      "cookies": [],
+      "related_endpoints": [59, 61],
+      "media_related": true,
+      "streaming_related": true,
+      "notes": "Legacy endpoint (v1 path). Immediate recording trigger."
+    },
+    {
+      "id": 61,
+      "method": "POST",
+      "path": "/api/streams/rebuild/{accountId}",
+      "host": "raid.arkzynco.com",
+      "full_url": "https://raid.arkzynco.com/api/streams/rebuild/{accountId}",
+      "feature": "streaming_broadcast",
+      "description": "Rebuild stream video segments",
+      "static_status": "CONFIRMED_STATIC",
+      "dynamic_status": "CONFIRMED_401",
+      "confidence": "HIGH",
+      "source_files": ["index-1.3.0.js"],
+      "calling_function": "fe.rebuildVideo(uid, uuid)",
+      "request_headers": {
+        "Authorization": "Bearer {token}",
+        "Content-Type": "application/json"
+      },
+      "path_params": {
+        "accountId": {"type": "string", "source": "User/account ID"}
+      },
+      "request_body": {
+        "uuid": {"type": "string", "required": true}
+      },
+      "response_status": [200, 401],
+      "response_schema": {},
+      "authentication": "JWT",
+      "csrf": false,
+      "cookies": [],
+      "related_endpoints": [54],
+      "media_related": true,
+      "streaming_related": true,
+      "notes": "Legacy endpoint (v1 path). Rebuild video segments."
+    },
+    {
+      "id": 62,
+      "method": "POST",
+      "path": "/api/v2/record-profile/{accountId}",
+      "host": "raid.arkzynco.com",
+      "full_url": "https://raid.arkzynco.com/api/v2/record-profile/{accountId}",
+      "feature": "streaming_broadcast",
+      "description": "Start recording a TikTok profile's live stream",
+      "static_status": "CONFIRMED_STATIC",
+      "dynamic_status": "CONFIRMED_401",
+      "confidence": "HIGH",
+      "source_files": ["index-1.3.0.js"],
+      "calling_function": "P.recordNow(uid, s)",
+      "request_headers": {
+        "Authorization": "Bearer {token}",
+        "Content-Type": "application/json"
+      },
+      "path_params": {
+        "accountId": {"type": "string", "source": "User/account ID"}
+      },
+      "request_body": "s (username + params)",
+      "response_status": [200, 401],
+      "response_schema": {},
+      "authentication": "JWT",
+      "csrf": false,
+      "cookies": [],
+      "related_endpoints": [60],
+      "media_related": true,
+      "streaming_related": true,
+      "notes": "v2 endpoint. Main record-trigger endpoint from JS."
+    },
+    {
+      "id": 63,
+      "method": "POST",
+      "path": "/api/v2/record-profile/{username}",
+      "host": "raid.arkzynco.com",
+      "full_url": "https://raid.arkzynco.com/api/v2/record-profile/{username}",
+      "feature": "streaming_broadcast",
+      "description": "Quick share record (native Android Intent handler)",
+      "static_status": "CONFIRMED_STATIC",
+      "dynamic_status": "NOT_TESTED",
+      "confidence": "HIGH",
+      "source_files": ["ShareReceiverActivity.java"],
+      "calling_function": "ShareReceiverActivity.handleShare()",
+      "request_headers": {
+        "Authorization": "Bearer {token}",
+        "Content-Type": "application/json"
+      },
+      "path_params": {
+        "username": {"type": "string", "source": "TikTok username from shared URL"}
+      },
+      "request_body": "shareData (TikTok share URL data)",
+      "response_status": [200, 401],
+      "response_schema": {},
+      "authentication": "JWT",
+      "csrf": false,
+      "cookies": [],
+      "related_endpoints": [62],
+      "media_related": true,
+      "streaming_related": true,
+      "notes": "Native Java endpoint. Path param is username (not accountId). From ShareReceiverActivity.java:35"
+    },
+    {
+      "id": 64,
+      "method": "GET",
+      "path": "/api/v2/favorites/{accountId}/list",
+      "host": "raid.arkzynco.com",
+      "full_url": "https://raid.arkzynco.com/api/v2/favorites/{accountId}/list",
+      "feature": "favorites",
+      "description": "List all favorited recordings",
+      "static_status": "CONFIRMED_STATIC",
+      "dynamic_status": "CONFIRMED_401",
+      "confidence": "HIGH",
+      "source_files": ["index-1.3.0.js"],
+      "calling_function": "P.favorites(uid, s)",
+      "request_headers": {
+        "Authorization": "Bearer {token}"
+      },
+      "path_params": {
+        "accountId": {"type": "string", "source": "User/account ID"}
+      },
+      "request_query_params": "s (pagination params)",
+      "response_status": [200, 401],
+      "response_schema": {
+        "200": {
+          "data": "[RecordObject]",
+          "meta": "PaginationMeta"
+        }
+      },
+      "authentication": "JWT",
+      "csrf": false,
+      "cookies": [],
+      "related_endpoints": [65, 66],
+      "media_related": true,
+      "streaming_related": false,
+      "notes": "Paginated favorites list"
+    },
+    {
+      "id": 65,
+      "method": "POST",
+      "path": "/api/v2/favorites/{accountId}/{recordId}",
+      "host": "raid.arkzynco.com",
+      "full_url": "https://raid.arkzynco.com/api/v2/favorites/{accountId}/{recordId}",
+      "feature": "favorites",
+      "description": "Add a recording to favorites",
+      "static_status": "CONFIRMED_STATIC",
+      "dynamic_status": "NOT_TESTED",
+      "confidence": "MEDIUM",
+      "source_files": ["index-1.3.0.js"],
+      "calling_function": "P.addFavorite(uid, recordId)",
+      "request_headers": {
+        "Authorization": "Bearer {token}"
+      },
+      "path_params": {
+        "accountId": {"type": "string", "source": "User/account ID"},
+        "recordId": {"type": "string", "source": "Record ID"}
+      },
+      "request_body": null,
+      "response_status": [200, 401],
+      "response_schema": {},
+      "authentication": "JWT",
+      "csrf": false,
+      "cookies": [],
+      "related_endpoints": [64, 66],
+      "media_related": true,
+      "streaming_related": false,
+      "notes": "Add to favorites - no body"
+    },
+    {
+      "id": 66,
+      "method": "DELETE",
+      "path": "/api/v2/favorites/{accountId}/{recordId}",
+      "host": "raid.arkzynco.com",
+      "full_url": "https://raid.arkzynco.com/api/v2/favorites/{accountId}/{recordId}",
+      "feature": "favorites",
+      "description": "Remove a recording from favorites",
+      "static_status": "CONFIRMED_STATIC",
+      "dynamic_status": "NOT_TESTED",
+      "confidence": "MEDIUM",
+      "source_files": ["index-1.3.0.js"],
+      "calling_function": "P.removeFavorite(uid, recordId)",
+      "request_headers": {
+        "Authorization": "Bearer {token}"
+      },
+      "path_params": {
+        "accountId": {"type": "string", "source": "User/account ID"},
+        "recordId": {"type": "string", "source": "Record ID"}
+      },
+      "request_body": null,
+      "response_status": [200, 401],
+      "response_schema": {},
+      "authentication": "JWT",
+      "csrf": false,
+      "cookies": [],
+      "related_endpoints": [64, 65],
+      "media_related": true,
+      "streaming_related": false,
+      "notes": "Remove from favorites - no body"
+    },
+    {
+      "id": 67,
+      "method": "POST",
+      "path": "/api/v2/purchase/storage",
+      "host": "raid.arkzynco.com",
+      "full_url": "https://raid.arkzynco.com/api/v2/purchase/storage",
+      "feature": "purchase_subscription",
+      "description": "Purchase storage upgrade",
+      "static_status": "CONFIRMED_STATIC",
+      "dynamic_status": "CONFIRMED_401",
+      "confidence": "HIGH",
+      "source_files": ["index-1.3.0.js"],
+      "calling_function": "L.subscribeStorage(s)",
+      "request_headers": {
+        "Authorization": "Bearer {token}",
+        "Content-Type": "application/json"
+      },
+      "request_body": "s (purchase data + IAP receipt)",
+      "response_status": [200, 401],
+      "response_schema": {},
+      "authentication": "JWT",
+      "csrf": false,
+      "cookies": [],
+      "related_endpoints": [68, 69],
+      "media_related": false,
+      "streaming_related": false,
+      "notes": "RevenueCat IAP integration"
+    },
+    {
+      "id": 68,
+      "method": "POST",
+      "path": "/api/v2/purchase/slots",
+      "host": "raid.arkzynco.com",
+      "full_url": "https://raid.arkzynco.com/api/v2/purchase/slots",
+      "feature": "purchase_subscription",
+      "description": "Purchase additional profile slots",
+      "static_status": "CONFIRMED_STATIC",
+      "dynamic_status": "CONFIRMED_401",
+      "confidence": "HIGH",
+      "source_files": ["index-1.3.0.js"],
+      "calling_function": "L.subscribeSlots(s)",
+      "request_headers": {
+        "Authorization": "Bearer {token}",
+        "Content-Type": "application/json"
+      },
+      "request_body": "s (purchase data + IAP receipt)",
+      "response_status": [200, 401],
+      "response_schema": {},
+      "authentication": "JWT",
+      "csrf": false,
+      "cookies": [],
+      "related_endpoints": [67, 69],
+      "media_related": false,
+      "streaming_related": false,
+      "notes": "RevenueCat IAP integration"
+    },
+    {
+      "id": 69,
+      "method": "GET",
+      "path": "/api/v2/purchase/history-list",
+      "host": "raid.arkzynco.com",
+      "full_url": "https://raid.arkzynco.com/api/v2/purchase/history-list",
+      "feature": "purchase_subscription",
+      "description": "Get purchase history",
+      "static_status": "CONFIRMED_STATIC",
+      "dynamic_status": "CONFIRMED_401",
+      "confidence": "HIGH",
+      "source_files": ["index-1.3.0.js"],
+      "calling_function": "L.purchaseHistory(s)",
+      "request_headers": {
+        "Authorization": "Bearer {token}"
+      },
+      "request_query_params": "s (params)",
+      "response_status": [200, 401],
+      "response_schema": {
+        "200": "list of purchase records"
+      },
+      "authentication": "JWT",
+      "csrf": false,
+      "cookies": [],
+      "related_endpoints": [67, 68],
+      "media_related": false,
+      "streaming_related": false,
+      "notes": "Purchase history with pagination"
+    },
+    {
+      "id": 70,
+      "method": "POST",
+      "path": "/api/public/history/fetch",
+      "host": "ws.arkzynco.com",
+      "full_url": "https://ws.arkzynco.com/api/public/history/fetch",
+      "feature": "public_unauthenticated",
+      "description": "Fetch TikTok username history (onboarding)",
+      "static_status": "CONFIRMED_STATIC",
+      "dynamic_status": "CONFIRMED_200",
+      "confidence": "HIGH",
+      "source_files": ["index-1.3.0.js"],
+      "calling_function": "fs.fetchHistory(s)",
+      "client": "Bg (ws.arkzynco.com)",
+      "request_headers": {
+        "Content-Type": "application/json"
+      },
+      "request_body": {
+        "username": {"type": "string", "required": true, "description": "TikTok username"}
+      },
+      "response_status": [200],
+      "response_schema": {
+        "200": {
+          "status": "success",
+          "data": [
+            {
+              "thumb": "string (TikTok CDN URL)",
+              "count": "number",
+              "username": "string",
+              "uid": "string",
+              "nickname": "string"
+            }
+          ]
+        }
+      },
+      "authentication": "none",
+      "csrf": false,
+      "cookies": [],
+      "related_endpoints": [71, 72],
+      "media_related": false,
+      "streaming_related": false,
+      "notes": "PUBLIC - no auth required. Returns TikTok profile data with thumbnails and stream history."
+    },
+    {
+      "id": 71,
+      "method": "POST",
+      "path": "/api/public/stream-count",
+      "host": "raid.arkzynco.com",
+      "full_url": "https://raid.arkzynco.com/api/public/stream-count",
+      "feature": "public_unauthenticated",
+      "description": "Get stream count (onboarding teaser)",
+      "static_status": "CONFIRMED_STATIC",
+      "dynamic_status": "CONFIRMED_404",
+      "confidence": "LOW",
+      "source_files": ["index-1.3.0.js"],
+      "calling_function": "fs.getStreamCount(s)",
+      "client": "u (raid.arkzynco.com)",
+      "request_headers": {
+        "Content-Type": "application/json"
+      },
+      "request_body": {
+        "username": {"type": "string", "required": true}
+      },
+      "response_status": [404],
+      "response_schema": {},
+      "authentication": "none",
+      "csrf": false,
+      "cookies": [],
+      "related_endpoints": [70],
+      "media_related": false,
+      "streaming_related": false,
+      "notes": "Returns 404 - endpoint not implemented on server"
+    },
+    {
+      "id": 72,
+      "method": "POST",
+      "path": "/api/history/fetch",
+      "host": "ws.arkzynco.com",
+      "full_url": "https://ws.arkzynco.com/api/history/fetch",
+      "feature": "public_unauthenticated",
+      "description": "Fetch username history (authenticated version)",
+      "static_status": "CONFIRMED_STATIC",
+      "dynamic_status": "CONFIRMED_401",
+      "confidence": "HIGH",
+      "source_files": ["index-1.3.0.js"],
+      "calling_function": "fe.fetchSyncStreams(username)",
+      "client": "xe (ws.arkzynco.com)",
+      "request_headers": {
+        "Authorization": "Bearer {token}",
+        "Content-Type": "application/json"
+      },
+      "request_body": {
+        "username": {"type": "string", "required": true}
+      },
+      "response_status": [200, 401],
+      "response_schema": {
+        "200": "sync stream data"
+      },
+      "authentication": "JWT",
+      "csrf": false,
+      "cookies": [],
+      "related_endpoints": [70],
+      "media_related": false,
+      "streaming_related": false,
+      "notes": "Authenticated version of /api/public/history/fetch"
+    },
+    {
+      "id": 73,
+      "method": "POST",
+      "path": "/api/v2/logout",
+      "host": "raid.arkzynco.com",
+      "full_url": "https://raid.arkzynco.com/api/v2/logout",
+      "feature": "authentication",
+      "description": "Logout and invalidate token",
+      "static_status": "CONFIRMED_STATIC",
+      "dynamic_status": "CONFIRMED_401",
+      "confidence": "HIGH",
+      "source_files": ["index-1.3.0.js"],
+      "calling_function": "Q.logout()",
+      "request_headers": {
+        "Authorization": "Bearer {token}"
+      },
+      "request_body": null,
+      "response_status": [200, 401],
+      "response_schema": {},
+      "authentication": "JWT",
+      "csrf": false,
+      "cookies": [],
+      "related_endpoints": [1, 2, 19],
+      "media_related": false,
+      "streaming_related": false,
+      "notes": "Excluded from auto-logout interceptor"
+    },
+    {
+      "id": 74,
+      "method": "POST",
+      "path": "/api/v2/network-log",
+      "host": "raid.arkzynco.com",
+      "full_url": "https://raid.arkzynco.com/api/v2/network-log",
+      "feature": "miscellaneous",
+      "description": "Report network error to server",
+      "static_status": "CONFIRMED_STATIC",
+      "dynamic_status": "CONFIRMED_401",
+      "confidence": "MEDIUM",
+      "source_files": ["index-1.3.0.js"],
+      "calling_function": "Q.sendNetworkError(s)",
+      "request_headers": {
+        "Authorization": "Bearer {token}",
+        "Content-Type": "application/json"
+      },
+      "request_body": "s (error details)",
+      "response_status": [200, 401],
+      "response_schema": {},
+      "authentication": "JWT",
+      "csrf": false,
+      "cookies": [],
+      "related_endpoints": [],
+      "media_related": false,
+      "streaming_related": false,
+      "notes": "Network error reporting"
+    },
+    {
+      "id": 75,
+      "method": "GET",
+      "path": "/api/v2/news",
+      "host": "raid.arkzynco.com",
+      "full_url": "https://raid.arkzynco.com/api/v2/news",
+      "feature": "miscellaneous",
+      "description": "Get news/announcements",
+      "static_status": "CONFIRMED_STATIC",
+      "dynamic_status": "CONFIRMED_401",
+      "confidence": "HIGH",
+      "source_files": ["index-1.3.0.js"],
+      "calling_function": "L.news()",
+      "request_headers": {
+        "Authorization": "Bearer {token}"
+      },
+      "request_body": null,
+      "response_status": [200, 401],
+      "response_schema": {},
+      "authentication": "JWT",
+      "csrf": false,
+      "cookies": [],
+      "related_endpoints": [],
+      "media_related": false,
+      "streaming_related": false,
+      "notes": "News/announcements"
+    },
+    {
+      "id": 76,
+      "method": "GET",
+      "path": "/api/v2/promotions",
+      "host": "raid.arkzynco.com",
+      "full_url": "https://raid.arkzynco.com/api/v2/promotions",
+      "feature": "miscellaneous",
+      "description": "Get active promotions",
+      "static_status": "CONFIRMED_STATIC",
+      "dynamic_status": "CONFIRMED_401",
+      "confidence": "HIGH",
+      "source_files": ["index-1.3.0.js"],
+      "calling_function": "Q.promotions()",
+      "request_headers": {
+        "Authorization": "Bearer {token}"
+      },
+      "request_body": null,
+      "response_status": [200, 401],
+      "response_schema": {},
+      "authentication": "JWT",
+      "csrf": false,
+      "cookies": [],
+      "related_endpoints": [],
+      "media_related": false,
+      "streaming_related": false,
+      "notes": "Active promotions"
+    },
+    {
+      "id": 77,
+      "method": "GET",
+      "path": "/api/v2/flip-game/state",
+      "host": "raid.arkzynco.com",
+      "full_url": "https://raid.arkzynco.com/api/v2/flip-game/state",
+      "feature": "miscellaneous",
+      "description": "Get flip game state and rewards",
+      "static_status": "CONFIRMED_STATIC",
+      "dynamic_status": "CONFIRMED_401",
+      "confidence": "HIGH",
+      "source_files": ["index-1.3.0.js"],
+      "calling_function": "us.getState()",
+      "request_headers": {
+        "Authorization": "Bearer {token}"
+      },
+      "request_body": null,
+      "response_status": [200, 401],
+      "response_schema": {
+        "200": {
+          "canFlip": "boolean",
+          "flipBalance": "number",
+          "dailyBonusFlip": "boolean",
+          "isJackpotReady": "boolean"
+        }
+      },
+      "authentication": "JWT",
+      "csrf": false,
+      "cookies": [],
+      "related_endpoints": [78],
+      "media_related": false,
+      "streaming_related": false,
+      "notes": "Gamification flip game"
+    },
+    {
+      "id": 78,
+      "method": "POST",
+      "path": "/api/v2/flip-game/play",
+      "host": "raid.arkzynco.com",
+      "full_url": "https://raid.arkzynco.com/api/v2/flip-game/play",
+      "feature": "miscellaneous",
+      "description": "Play flip game (gamification)",
+      "static_status": "CONFIRMED_STATIC",
+      "dynamic_status": "CONFIRMED_401",
+      "confidence": "HIGH",
+      "source_files": ["index-1.3.0.js"],
+      "calling_function": "us.play()",
+      "request_headers": {
+        "Authorization": "Bearer {token}"
+      },
+      "request_body": null,
+      "response_status": [200, 401],
+      "response_schema": {},
+      "authentication": "JWT",
+      "csrf": false,
+      "cookies": [],
+      "related_endpoints": [77],
+      "media_related": false,
+      "streaming_related": false,
+      "notes": "Flip game play action"
+    },
+    {
+      "id": 79,
+      "method": "GET",
+      "path": "/api/slides",
+      "host": "raid.arkzynco.com",
+      "full_url": "https://raid.arkzynco.com/api/slides",
+      "feature": "miscellaneous",
+      "description": "Get onboarding slides",
+      "static_status": "CONFIRMED_STATIC",
+      "dynamic_status": "NOT_TESTED",
+      "confidence": "MEDIUM",
+      "source_files": ["index-1.3.0.js"],
+      "calling_function": "getSlides()",
+      "request_headers": {},
+      "request_body": null,
+      "response_status": [200],
+      "response_schema": {
+        "200": {
+          "data": [
+            {
+              "id": "number",
+              "img": "string (image URL)",
+              "url": "string (link URL)"
+            }
+          ]
+        }
+      },
+      "authentication": "none",
+      "csrf": false,
+      "cookies": [],
+      "related_endpoints": [80],
+      "media_related": false,
+      "streaming_related": false,
+      "notes": "Onboarding slides carousel"
+    },
+    {
+      "id": 80,
+      "method": "GET",
+      "path": "/api/pages/{pageUrl}",
+      "host": "raid.arkzynco.com",
+      "full_url": "https://raid.arkzynco.com/api/pages/{pageUrl}",
+      "feature": "miscellaneous",
+      "description": "Get CMS page content (FAQ, terms, etc.)",
+      "static_status": "CONFIRMED_STATIC",
+      "dynamic_status": "CONFIRMED_401",
+      "confidence": "HIGH",
+      "source_files": ["index-1.3.0.js"],
+      "calling_function": "router push / loadContent()",
+      "request_headers": {},
+      "path_params": {
+        "pageUrl": {"type": "string", "source": "Page slug", "examples": ["faq", "terms", "privacy"]}
+      },
+      "request_body": null,
+      "response_status": [200, 401],
+      "response_schema": {
+        "200": {
+          "data": {
+            "content": "string (HTML)",
+            "title": "string"
+          }
+        }
+      },
+      "authentication": "none",
+      "csrf": false,
+      "cookies": [],
+      "related_endpoints": [81],
+      "media_related": false,
+      "streaming_related": false,
+      "notes": "CMS page content"
+    },
+    {
+      "id": 81,
+      "method": "GET",
+      "path": "/api/pages/rewards-overview",
+      "host": "raid.arkzynco.com",
+      "full_url": "https://raid.arkzynco.com/api/pages/rewards-overview",
+      "feature": "miscellaneous",
+      "description": "Get rewards overview page content",
+      "static_status": "CONFIRMED_STATIC",
+      "dynamic_status": "NOT_TESTED",
+      "confidence": "MEDIUM",
+      "source_files": ["index-1.3.0.js"],
+      "calling_function": "loadContent()",
+      "request_headers": {},
+      "request_body": null,
+      "response_status": [200],
+      "response_schema": {
+        "200": {
+          "data": {
+            "content": "string (HTML)",
+            "title": "string"
+          }
+        }
+      },
+      "authentication": "none",
+      "csrf": false,
+      "cookies": [],
+      "related_endpoints": [80],
+      "media_related": false,
+      "streaming_related": false,
+      "notes": "Rewards overview content"
+    },
+    {
+      "id": 82,
+      "method": "POST",
+      "path": "/api/followers/{accountId}",
+      "host": "ws.arkzynco.com",
+      "full_url": "https://ws.arkzynco.com/api/followers/{accountId}",
+      "feature": "followers_tracking",
+      "description": "Legacy follower add (via secondary client)",
+      "static_status": "NOT_IN_STATIC",
+      "dynamic_status": "NOT_TESTED",
+      "confidence": "HIGH",
+      "source_files": ["index-1.3.0.js"],
+      "calling_function": "fe.fetchFollower(uid, username, fetch)",
+      "client": "fe (ws.arkzynco.com)",
+      "request_headers": {
+        "Authorization": "Bearer {token}",
+        "Content-Type": "application/json"
+      },
+      "path_params": {
+        "accountId": {"type": "string", "source": "User/account ID"}
+      },
+      "request_body": {
+        "username": {"type": "string", "required": true},
+        "fetch": {"type": "boolean", "default": false}
+      },
+      "response_status": [200, 401],
+      "response_schema": {},
+      "authentication": "JWT",
+      "csrf": false,
+      "cookies": [],
+      "related_endpoints": [22],
+      "media_related": false,
+      "streaming_related": false,
+      "notes": "UNDISCOUNTED - Legacy endpoint via xe/fe client. Same function as #22 but different host."
+    },
+    {
+      "id": 83,
+      "method": "POST",
+      "path": "/api/profile/login",
+      "host": "ws.arkzynco.com",
+      "full_url": "https://ws.arkzynco.com/api/profile/login",
+      "feature": "authentication",
+      "description": "Profile-based login (legacy)",
+      "static_status": "NOT_IN_STATIC",
+      "dynamic_status": "NOT_TESTED",
+      "confidence": "HIGH",
+      "source_files": ["index-1.3.0.js"],
+      "calling_function": "fe.login(s, profile)",
+      "client": "fe (ws.arkzynco.com)",
+      "request_headers": {
+        "Content-Type": "application/json"
+      },
+      "request_body": "s (credentials)",
+      "response_status": [200, 401],
+      "response_schema": {},
+      "authentication": "none",
+      "csrf": false,
+      "cookies": [],
+      "related_endpoints": [84],
+      "media_related": false,
+      "streaming_related": false,
+      "notes": "UNDISCOUNTED - Legacy profile login. If profile.id exists, path becomes /api/profile/login/{id}"
+    },
+    {
+      "id": 84,
+      "method": "POST",
+      "path": "/api/profile/code",
+      "host": "ws.arkzynco.com",
+      "full_url": "https://ws.arkzynco.com/api/profile/code",
+      "feature": "authentication",
+      "description": "Profile verification code (legacy)",
+      "static_status": "NOT_IN_STATIC",
+      "dynamic_status": "NOT_TESTED",
+      "confidence": "HIGH",
+      "source_files": ["index-1.3.0.js"],
+      "calling_function": "fe.code(s, profile)",
+      "client": "fe (ws.arkzynco.com)",
+      "request_headers": {
+        "Content-Type": "application/json"
+      },
+      "request_body": "s (code data)",
+      "response_status": [200, 401],
+      "response_schema": {},
+      "authentication": "none",
+      "csrf": false,
+      "cookies": [],
+      "related_endpoints": [83],
+      "media_related": false,
+      "streaming_related": false,
+      "notes": "UNDISCOUNTED - Legacy profile code verification. If profile.id exists, path becomes /api/profile/code/{id}"
+    },
+    {
+      "id": 85,
+      "method": "GET",
+      "path": "/api/pages/faq",
+      "host": "raid.arkzynco.com",
+      "full_url": "https://raid.arkzynco.com/api/pages/faq",
+      "feature": "miscellaneous",
+      "description": "Get FAQ page (alias for /api/pages/{slug})",
+      "static_status": "NOT_IN_STATIC",
+      "dynamic_status": "CONFIRMED_401",
+      "confidence": "MEDIUM",
+      "source_files": [],
+      "calling_function": "router push",
+      "request_headers": {},
+      "request_body": null,
+      "response_status": [200, 401],
+      "response_schema": {},
+      "authentication": "none",
+      "csrf": false,
+      "cookies": [],
+      "related_endpoints": [80],
+      "media_related": false,
+      "streaming_related": false,
+      "notes": "Alias for /api/pages/faq - dynamic route resolution"
+    },
+    {
+      "id": 86,
+      "method": "GET",
+      "path": "/api/v2/user/profile",
+      "host": "raid.arkzynco.com",
+      "full_url": "https://raid.arkzynco.com/api/v2/user/profile",
+      "feature": "user_profiles",
+      "description": "Get user profile list (alias)",
+      "static_status": "NOT_IN_STATIC",
+      "dynamic_status": "CONFIRMED_401",
+      "confidence": "MEDIUM",
+      "source_files": ["index-1.3.0.js"],
+      "calling_function": "L.fetch() variant",
+      "request_headers": {
+        "Authorization": "Bearer {token}"
+      },
+      "request_body": null,
+      "response_status": [200, 401],
+      "response_schema": {},
+      "authentication": "JWT",
+      "csrf": false,
+      "cookies": [],
+      "related_endpoints": [11, 16],
+      "media_related": false,
+      "streaming_related": false,
+      "notes": "UNDISCOUNTED - Appears to be an alias for user profile list"
+    },
+    {
+      "id": 87,
+      "method": "POST",
+      "path": "/api/followers/{uid}",
+      "host": "ws.arkzynco.com",
+      "full_url": "https://ws.arkzynco.com/api/followers/{uid}",
+      "feature": "followers_tracking",
+      "description": "Undocumented: Alternative follower endpoint",
+      "static_status": "NOT_IN_STATIC",
+      "dynamic_status": "NOT_TESTED",
+      "confidence": "LOW",
+      "source_files": ["index-1.3.0.js"],
+      "calling_function": "fe.fetchFollower()",
+      "client": "xe (ws.arkzynco.com)",
+      "request_headers": {
+        "Authorization": "Bearer {token}"
+      },
+      "request_body": {
+        "username": {"type": "string", "required": true},
+        "fetch": {"type": "boolean", "default": false}
+      },
+      "response_status": [200, 401],
+      "response_schema": {},
+      "authentication": "JWT",
+      "csrf": false,
+      "cookies": [],
+      "related_endpoints": [22, 82],
+      "media_related": false,
+      "streaming_related": false,
+      "notes": "UNDISCOUNTED - Duplicate of #82 with different param name"
+    },
+    {
+      "id": 88,
+      "method": "POST",
+      "path": "/api/v2/followers/{uid}/{pid}",
+      "host": "raid.arkzynco.com",
+      "full_url": "https://raid.arkzynco.com/api/v2/followers/{uid}/{pid}",
+      "feature": "followers_tracking",
+      "description": "Unlock follower history",
+      "static_status": "NOT_IN_STATIC",
+      "dynamic_status": "NOT_TESTED",
+      "confidence": "MEDIUM",
+      "source_files": ["index-1.3.0.js"],
+      "calling_function": "y.unlockHistory(uid, s)",
+      "request_headers": {
+        "Authorization": "Bearer {token}",
+        "Content-Type": "application/json"
+      },
+      "path_params": {
+        "uid": {"type": "string", "source": "User/account ID"},
+        "pid": {"type": "string", "source": "Profile ID"}
+      },
+      "request_body": "{...s} (params object). If s.isFree, appends /free to path",
+      "response_status": [200, 401],
+      "response_schema": {},
+      "authentication": "JWT",
+      "csrf": false,
+      "cookies": [],
+      "related_endpoints": [25, 29],
+      "media_related": false,
+      "streaming_related": false,
+      "notes": "UNDISCOUNTED - Unlock history endpoint. Conditional path: /api/v2/followers/{uid}/{pid}/free when isFree=true"
+    }
+  ],
+  "service_objects": {
+    "Q": {
+      "role": "Auth",
+      "client": "u (raid.arkzynco.com)",
+      "functions": ["signin", "login", "register", "confirmEmail", "forgotPassword", "resetPassword", "loginDevice", "logout", "csrf", "status", "promotions", "sendNetworkError"]
+    },
+    "L": {
+      "role": "User",
+      "client": "u (raid.arkzynco.com)",
+      "functions": ["fetch", "update", "addProfile", "updateProfile", "removeProfile", "logoutProfile", "muteProfile", "subscribeStorage", "subscribeSlots", "purchaseHistory", "fcm", "delete", "transferRecordings", "installed", "news"]
+    },
+    "P": {
+      "role": "Records",
+      "client": "u (raid.arkzynco.com)",
+      "functions": ["favorites", "addFavorite", "removeFavorite", "removeRecord", "removeSelectedRecords", "removeUserRecords", "records", "getRecord", "getVideoUrl", "recordNow", "startRecord", "broadcasts", "buildVideo", "setDownloaded", "attachRecord", "getStorageUsage", "deleteAllRecords"]
+    },
+    "y": {
+      "role": "Followers",
+      "client": "u (raid.arkzynco.com)",
+      "functions": ["followers", "follower", "fetchUnlock", "unlockHistory", "store", "remove", "search", "suggest", "discover", "discoverBubbles", "similar", "hide", "reportUnlockError", "exploreLives", "report", "like", "likes", "usernameHistory", "toggleFollowerStatus", "alsoBought", "ranked", "followingList", "fetchFollowing", "requestValidation", "deepCheckArchive"]
+    },
+    "fe": {
+      "role": "Profile Actions (Legacy)",
+      "client": "xe (ws.arkzynco.com)",
+      "functions": ["fetchFollower", "fetchSyncStreams", "recordNow", "rebuildVideo", "login", "code"]
+    },
+    "us": {
+      "role": "Flip Game",
+      "client": "u (raid.arkzynco.com)",
+      "functions": ["getState", "play"]
+    },
+    "fs": {
+      "role": "Public/History",
+      "client": "Bg (ws.arkzynco.com) / u (raid.arkzynco.com)",
+      "functions": ["fetchHistory", "getStreamCount"]
+    }
+  }
+}
